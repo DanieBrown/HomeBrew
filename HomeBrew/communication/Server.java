@@ -1,40 +1,70 @@
 package communication;
-import java.io.*;
-import java.net.*;
-	 
+
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
 public class Server{
-	   public static void main(String argv[]) throws Exception
-	      {
-	 
-	   		 System.out.println(" Server is Running  " );
-	         ServerSocket mysocket = new ServerSocket(5555);
-	 
-	         while(true){
-	            Socket connectionSocket = mysocket.accept();
-	 
-	            BufferedReader reader =
-	            		new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-	            BufferedWriter writer= 
-	            		new BufferedWriter(new OutputStreamWriter(connectionSocket.getOutputStream()));
-	 
-	            writer.write("*** Welcome to the Calculation Server (Addition Only) ***\r\n");            
-	            writer.write("*** Please type in the first number and press Enter : \n");
-	            writer.flush();
-	            String data1 = reader.readLine().trim();
-	 
-	            writer.write("*** Please type in the second number and press Enter : \n");
-	            writer.flush();
-	            String data2 = reader.readLine().trim();
-	 
-	            int num1=Integer.parseInt(data1);
-	            int num2=Integer.parseInt(data2);
-	 
-	            int result=num1+num2;            
-	            System.out.println("Addition operation done " );
-	 
-	            writer.write("\r\n=== Result is  : "+result);
-	            writer.flush();
-	            connectionSocket.close();
-	         }
-	      }
+	    public static void main(String arg[]) throws Exception {
+	    DatagramSocket serversocket = new DatagramSocket(9999);
+	    Server udpserver = new Server();
+	    byte[] receivedBuffer; // = new byte[1024];
+	    byte[] sentBuffer; //= new byte[1024];
+	    while (true) {
+	        receivedBuffer = new byte[1024];
+	        sentBuffer = new byte[1024];
+	        DatagramPacket receivedpacket = new DatagramPacket(receivedBuffer, receivedBuffer.length);
+	        System.out.println("Server Waiting for a message from Client.....");
+	
+	        serversocket.receive(receivedpacket);
+	        String fromClient = new String(receivedpacket.getData());
+	        // enter td command to display the curerct date and time
+	        if (fromClient != null && fromClient.startsWith("td")) {
+	            InetAddress clientIP = receivedpacket.getAddress();
+	            System.out.println("Message received from client : " + fromClient + " at IP Address = "
+	                    + clientIP.getHostAddress() + ", Host Name = " + clientIP.getHostName());
+	
+	            String toClient = udpserver.dateAndTime();
+	            sentBuffer = toClient.getBytes();
+	            DatagramPacket sendpacket = new DatagramPacket(sentBuffer, sentBuffer.length, clientIP, 8888);
+	            serversocket.send(sendpacket);
+	            System.out.println(" Reply Message is sent to client " + clientIP.getHostAddress());
+	        }
+	
+	        // converting the TEMPERATURE into Farenheit
+	        if (fromClient != null && fromClient.startsWith("TEMP") && !fromClient.startsWith("td")) {
+	
+	            InetAddress clientIP = receivedpacket.getAddress();
+	            System.out.println("Message received from client : " + fromClient + " at IP Address = "
+	                    + clientIP.getHostAddress() + ", Host Name = " + clientIP.getHostName());
+	            float temp = Float.parseFloat(fromClient.substring(fromClient.indexOf(' ') + 1));
+	            float tempInFaren = (float) (temp * 1.8 + 32.0);
+	            //float toClient = tempInFaren ;
+	            String convertIntoFarenheit = String.valueOf(tempInFaren);
+	
+	            sentBuffer = convertIntoFarenheit.getBytes();
+	            DatagramPacket sendpacket = new DatagramPacket(sentBuffer, sentBuffer.length, clientIP, 8888);
+	            serversocket.send(sendpacket);
+	            System.out.println(" Reply Message is sent to client " + clientIP.getHostAddress());
+	
+	        }
+	        try {
+	            Thread.sleep(2000);
+	        } catch (InterruptedException ie) {
+	        }
+	    }
+	}
+	
+	//method for returning current date and time
+	public String dateAndTime() {
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    Date d = new Date();
+	    String s = sdf.format(d);
+	
+	    return s;
+	
+	}
 }
