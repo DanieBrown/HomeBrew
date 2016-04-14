@@ -22,6 +22,12 @@ http.createServer( function (request, response) {
          //Page found	  
          // HTTP Status: 200 : OK
          // Content Type: text/plain
+    	 // Get content from file
+    	 var contents = fs.readFileSync("dummy.json");
+    	 // Define to JSON type
+    	 var jsonContent = JSON.parse(contents);
+    	 console.log("Temp:", jsonContent[1].temp);
+    	 console.log("Email:", jsonContent[1].time);
          response.writeHead(200, {'Content-Type': 'text/html'});	
          
          // Write the content of the file to response body

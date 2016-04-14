@@ -5,6 +5,7 @@
  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
  <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 
 <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
  <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
@@ -78,24 +79,23 @@
         }]
     });
 });
- 
- 
- 
- 
- 
- 
- 
  </script>
 </head>
 <body>
-<h1>DS18B20 Temps</h1>
  
 <div class="container">
  <table class="table" id="temps">
  <thead>
  <tr>
- <th>Sensor ID</th>
- <th>Temperature (celsius)</th>
+ 	<th>Attempting to read in a JSON object onto page</th>
+ </tr>
+ <tr>
+ 	<td>
+		 <div ng-app = "">
+		  <span>Temp: {{temp[1]}} </span>
+		  <address>time: {{time[1]}} </address>
+		 </div>
+	</td>
  </tr>
  </thead>
  </table>
