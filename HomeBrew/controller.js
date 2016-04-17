@@ -1,7 +1,7 @@
 /**
  * http://usejsdoc.org/
  */
-var myApp = angular.module('myApp',[]);
+var app = angular.module('GraphApp',[]);
 function AppCtrl($scope, $http){
 	console.log("Hello World");
 	$http.get('/tempList');
@@ -20,3 +20,18 @@ function AppCtrl($scope, $http){
 	var tempList = [temp1,temp2,temp3];
 	$scope.tempList = tempList;
 }
+
+
+/*
+ * Get notifications.
+ */
+app.controller('tempList', function($scope, $http) {
+	$scope.getNotifications = function() {
+		$http({
+			method : 'GET',
+			url : '/CSC440Project1/Notification'
+		}).then( function(response) {
+			$scope.notif_x = response.data.results;
+		});
+	}
+});
