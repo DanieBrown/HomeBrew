@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app = "myApp">
+<html>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -10,8 +10,8 @@
 	<title>Temp Lister</title>
 </head>
 <body>
-	<div class = "container" ng-app = "GraphApp">
-		<div ng-controller = "TempList">
+	<div class = "container" data-ng-app = "GraphApp">
+		<div>
 			<h1>Temp Display</h1>
 			<table class="table">
 				<thead>
@@ -20,8 +20,8 @@
 						<th>Time</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr ng-repeat = "tempD in tempList" >
+				<tbody data-ng-controller = "TempList">
+					<tr data-ng-repeat = "tempD in tempList" >
 	            		<td>{{tempD.temp}}</td>
 	            		<td>{{tempD.time}}</td>
 	       			 </tr>
