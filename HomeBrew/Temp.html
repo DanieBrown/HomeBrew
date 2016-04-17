@@ -10,25 +10,24 @@
 	<title>Temp Lister</title>
 </head>
 <body>
-	<div class = "container" data-ng-controller = "GraphApp">
-		<h1>Temp Display</h1>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Temp</th>
-					<th>Time</th>
-				</tr>
-			</thead>
-			<tbody>
-				<div class="dropdown" data-ng-controller="tempList" data-ng-click="getNotifications()">
-            		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notifications <span class="caret"></span></a>
-            		<ul class="dropdown-menu">
-                		<li class="animate-repeat" data-ng-repeat="x in notif_x"><a href="#">{{x.note}}</a></li>
-                		<li class="animate-repeat" data-ng-if="notif_x.length == 0"><strong style="padding: 5px;">  No notifications.</strong></li>
-            		</ul>
-       			 </div>
-			</tbody>
-		</table>
+	<div class = "container" ng-app = "GraphApp">
+		<div ng-controller = "TempList">
+			<h1>Temp Display</h1>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Temp</th>
+						<th>Time</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat = "tempD in tempList" >
+	            		<td>{{tempD.temp}}</td>
+	            		<td>{{tempD.time}}</td>
+	       			 </tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 	
 </body>

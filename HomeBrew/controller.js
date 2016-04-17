@@ -2,7 +2,7 @@
  * http://usejsdoc.org/
  */
 var app = angular.module('GraphApp',[]);
-function AppCtrl($scope, $http){
+app.controller('TempList', function($scope, $http){
 	console.log("Hello World");
 	$http.get('/tempList');
 	temp1 = {
@@ -19,7 +19,7 @@ function AppCtrl($scope, $http){
 	};
 	var tempList = [temp1,temp2,temp3];
 	$scope.tempList = tempList;
-}
+});
 
 
 /*
