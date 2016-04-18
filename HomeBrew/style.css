@@ -1,0 +1,72 @@
+.datepickerdemoBasicUsage {
+  /** Demo styles for mdCalendar. */
+}
+
+.datepickerdemoBasicUsage md-content {
+}
+
+.datepickerdemoBasicUsage .validation-messages {
+
+}
+
+body {
+    background-color: #282A36;
+    color: #E6E7E8;
+    padding-top: 2em;
+    height: 100%;
+}
+
+#subtitle {
+    text-align: right;
+    color: #4F5371!important;
+    font-family: 'Raleway', sans-serif;
+}
+
+/* Subtitle links remain same color as text. */
+a {
+	color: inherit;
+	text-decoration: none;
+	:hover{color: 4F5371;}
+}
+#restart {
+	background: none !important;
+	border: none;
+	padding: 0 !important;
+	/* color:#516DA4;*/
+	/* text-decoration:underline;*/
+	cursor: pointer;
+}
+
+.btn {
+    background: transparent;
+    outline: white solid 1px;
+}
+
+* {
+  -webkit-border-radius: 0 !important;
+     -moz-border-radius: 0 !important;
+          border-radius: 0 !important;
+}
+
+*:focus {outline:0;}
+
+/***My Colors*** <3
+-------------------
+bg:        #282A36
+bg: rgb(40, 42, 54)
+-------------------
+link text: #516DA4
+dark link: #293573
+subtitle:  #4F5371
+-------------------
+bg:    #204056
+bg2:   #5D7483
+text:  #133E55
+text2: #FFFFFF
+btn1:  #39D1B4
+btn2:  #F65A5B
+scroll:#EDEDEB
+white: #E6E7E8
+       #F1F2F2
+grey:  #494842
+-------------- */
