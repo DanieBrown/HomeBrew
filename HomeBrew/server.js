@@ -11,6 +11,22 @@ app.get('/getTemp', function(req, res) {
 	});
 });
 
+app.get('/getTime', function(req, res) {
+	var here = db.DummyTemps.find().toArray();
+	console.log(here);
+	var temps = [];
+	for( i = 0; i < here.length; i++) {
+		
+		console.log(here[i].Time);
+		
+		temps.add(here[i].Time);
+		
+	}
+});
+
+
+
+
 /* serves main page */
 app.get("/", function(req, res) {
 	res.sendfile('index.htm')
