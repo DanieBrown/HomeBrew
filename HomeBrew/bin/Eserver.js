@@ -3,9 +3,6 @@ var app = express();
 var mongojs = require('mongojs');
 var db = mongojs('DummyTemps', ['DummyTemps']);
 
-app.use(express.static('public'));
-
-
 app.get('/Temp.html', function (req, res) {
    res.sendFile( __dirname + "/" + "Temp.html" );
 })
