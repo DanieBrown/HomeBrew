@@ -1,5 +1,5 @@
 # HomeBrew
-Download this JDK and install on BBBK.
-* https://drive.google.com/uc?export=download&id=0BxexlvZspFpzY1JYMk5vRmZyRms
-* https://news.ncsu.edu/2016/03/home-brew/
+Use these files to set up temp sensor example
+* [Part 1: File system setup](http://www.bonebrews.com/temperature-monitoring-with-the-ds18b20-on-a-beaglebone-black/)
+* [Part 2: Server setup](http://www.bonebrews.com/ds18b20-temperatures-in-your-browser/)
 * 12V 5.8A powersource to power thermoelectric cooler
