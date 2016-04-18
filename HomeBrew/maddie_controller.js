@@ -90,10 +90,6 @@ chart_view.controller('input_ctrl',
     		var point = {temp: $scope.t1, date:$scope.t2};
     		new_brew_dates.add(point.temp);
     		
-    		
-    		
-    		
-    		
     		/*$http({
 				method: 'POST',
 				url: '/Simplex_1/SearchFood',

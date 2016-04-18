@@ -28,105 +28,13 @@
 				</tbody>
 			</table>
 		</div>
-	</div>
-	<div class = "container">
-	<script type="text/javascript">
-	
-	var arrToMultiArr = function(arr){
-        var result = new Array()
-        for (var i=0; i < arr.length; i+=2){
-          var date = arr[i]
-          var count = arr[i + 1]
-          result.push([date, count])
-        }
-        return result
-    };
-    var mySeries = arrToMultiArr([#{seriesData}])
-
-    $(function () {
-        $('#container').highcharts({
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: "#{title}"
-        },
-        subtitle: {
-            text: 'Source: Internal DB'
-        },
-        xAxis: {
-            type: 'category',          
-            labels: {
-                rotation: -45,
-                style: {
-                    fontSize: '13px',
-                    fontFamily: 'Verdana, sans-serif'
-                }
-            }
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: "#{yAxisTitle}"
-            }
-        },
-        legend: {
-            enabled: false
-        },
-        series: [{
-            name: '#{seriesName}',
-            data: mySeries,
-            dataGrouping: {
-                enabled: true
-            },
-            dataLabels: {
-                enabled: true,
-                rotation: -90,
-                color: '#FFFFFF',
-                align: 'right',
-                x: 4,
-                y: 10,
-                style: {
-                    fontSize: '11px',
-                    fontFamily: 'Verdana, sans-serif',
-                    textShadow: '0 0 3px black'
-                }
-            }
-        }]
-      });
-    });
-	</script>
-	</div>
-	
-	
+	</div>	
 	
 <script>
 /**
  * Define the app.
  */
 var app = angular.module('GraphApp',[]);
-
-/**
- * Define controller 1 for testing purposes.
- */
-app.controller('ctrl01', function($scope){
-    temp1 = {
-            temp: 77,
-            time: 5
-    };
-    temp2 = {
-            temp: 99,
-            time: 69
-    };
-    temp3 = {
-            temp: 69,
-            time: 5
-    };
-    var tempList = [temp1,temp2,temp3];
-    $scope.tempList = tempList;
-});
-
-
 /*
  * Get temperatures. The url points to your getTemp
  * method in server_1.js.
@@ -139,35 +47,6 @@ app.controller('ctrl02', function($scope, $http) {
         $scope.t = response.data;
     });
 });
-
-
-app.controller('ctrl', function($scope) {
-	// Sample options for first chart
-	$scope.chartOptions = {
-		title : {
-			text : 'Your Current Brew'
-		},
-		xAxis : {
-			categories : [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
-					'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]
-		},
-		chart: {
-            renderTo: 'container',
-            
-            margin: [0, 0, 0, 0],
-            spacingTop: 0,
-            spacingBottom: 0,
-            spacingLeft: 0,
-            spacingRight: 0
-        },
-
-		series : [ {
-			data : [ 29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5,
-					216.4, 194.1, 95.6, 54.4 ]
-		} ]
-	};
-});	// end it
-
 </script>
 	
 </body>
