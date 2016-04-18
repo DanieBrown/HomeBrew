@@ -9,6 +9,12 @@ app.use(express.static('public'));
 app.get('/Temp.html', function (req, res) {
    res.sendFile( __dirname + "/" + "Temp.html" );
 })
+app.get('/index.html', function (req, res) {
+   res.sendFile( __dirname + "/" + "index.html" );
+})
+app.get('/createBrew.html', function (req, res) {
+   res.sendFile( __dirname + "/" + "createBrew.html" );
+})
 
 
 /**

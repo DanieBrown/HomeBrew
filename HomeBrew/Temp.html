@@ -1,22 +1,62 @@
 <!DOCTYPE html>
 <html>
+<!--see reference: src="http://www.highcharts.com/blog/194-using-highcharts-with-angular-js"-->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- include bootstrap, jquery for easy div manipulation -->
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	
+<!-- Custom styles for this template -->
+<link rel="stylesheet" type="text/css" href="style.css" />
+<link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Abel|Exo|Raleway'>
+    
+<!-- ANGULAR STYLES -->
+<link rel='stylesheet prefetch' href='https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.0-rc4/angular-material.css'>
+<link rel='stylesheet prefetch' href='https://material.angularjs.org/1.1.0-rc4/docs.css'>
+   	
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
 <script src = "controller.js"></script>
+<script src = "maddie_controller.js"></script>
 <head>
-	<title>Temp Lister</title>
+	<title>Highcharts directive demo</title>
 </head>
 <body>
+
+
 	<div class = "container" data-ng-app = "GraphApp">
+		<div data-ng-app="chart_view_module">
+			<div>
+            	<h2>OPTIMIZE YOUR BREW</h2>
+            		<p>refresh.</p>
+            		<p><button id="restart"> restart.</button></p>
+            		<p><a href="https://github.ncsu.edu/wireless-sensors/HomeBrew/" >github</a></p><!--style="color:#516DA4;"-->
+            	<br/>
+            		<p><u>AUTHORS</u></p>
+            		<p>Madison Hayes</p>
+            		<p>Daniel Brown</p>
+            		<p>Benjamin Wingo</p>
+            		<p>Patrick Yu</p>
+        	</div>
+        	<div  class="col-md-offset-1" id="subtitle" data-ng-controller="monitor_ctrl">
+				<hc-chart options="chartOptions">You do not have a brew running right now.</hc-chart>
+        	</div>
+		</div>
 		<div>
-			<h1>Temp Display</h1>
 			<table class="table">
 				<thead>
 					<tr>
