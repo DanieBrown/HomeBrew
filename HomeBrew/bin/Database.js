@@ -17,11 +17,12 @@ MongoClient.connect(url, function(err, db) {
 	}
 	
 	
-	
+
 	for( var i = 0; i<10; i++){
 		var number = getRandomInt(30, 100);
-		console.log(number);
-		var record = { Temp: number, Time: i };
+		var today = new Date();
+		console.log(today);
+		var record = { Temp: number, Time: today };
 		db.collection('DummyTemps').insert(record);
 	}
 	//db.collection('DummyTemps').remove();
