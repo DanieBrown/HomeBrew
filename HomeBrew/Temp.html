@@ -12,7 +12,7 @@
 <body>
 	<div class = "container" data-ng-app = "GraphApp">
 		<div>
-			<h1>Temp Display</h1>
+			<h1>Temp Display 1</h1>
 			<table class="table">
 				<thead>
 					<tr>
@@ -20,7 +20,7 @@
 						<th>Time</th>
 					</tr>
 				</thead>
-				<tbody data-ng-controller = "TempList">
+				<tbody data-ng-controller = "ctrl01">
 					<tr data-ng-repeat = "tempD in tempList" >
 	            		<td>{{tempD.temp}}</td>
 	            		<td>{{tempD.time}}</td>
@@ -28,7 +28,67 @@
 				</tbody>
 			</table>
 		</div>
+	
+	
+		<div>
+			<h1>Temp Display 2</h1>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Temp</th>
+						<th>Time</th>
+					</tr>
+				</thead>
+				<tbody data-ng-controller = "ctrl02">
+					<tr data-ng-repeat = "x in t" >
+	            		<td>{{x.temp}}</td>
+	            		<td>{{x.time}}</td>
+	       			 </tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
+<script>
+/**
+ * Define the app.
+ */
+var app = angular.module('GraphApp',[]);
+
+/**
+ * Define controller 1 for testing purposes.
+ */
+app.controller('ctrl01', function($scope){
+    temp1 = {
+            temp: 77,
+            time: 5
+    };
+    temp2 = {
+            temp: 99,
+            time: 69
+    };
+    temp3 = {
+            temp: 69,
+            time: 5
+    };
+    var tempList = [temp1,temp2,temp3];
+    $scope.tempList = tempList;
+});
+
+
+/*
+ * Get temperatures. The url points to your getTemp
+ * method in server_1.js.
+ */
+app.controller('ctrl02', function($scope, $http) {
+    $http({
+        method : 'GET',
+        url : '/getTemp'
+    }).then( function(response) {        
+        $scope.t = response.data;
+    });
+});
+
+</script>
 	
 </body>
 </html>

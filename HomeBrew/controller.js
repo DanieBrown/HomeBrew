@@ -3,8 +3,6 @@
  */
 var app = angular.module('GraphApp',[]);
 app.controller('TempList', function($scope, $http){
-	console.log("Hello World");
-	$http.get('/tempList');
 	temp1 = {
 			temp: 77,
 			time: 5
@@ -26,12 +24,12 @@ app.controller('TempList', function($scope, $http){
  * Get notifications.
  */
 app.controller('tempList', function($scope, $http) {
-	$scope.getNotifications = function() {
+	$scope.ListTemperatures = function() {
 		$http({
 			method : 'GET',
-			url : '/CSC440Project1/Notification'
+			url : '/Database.js'
 		}).then( function(response) {
-			$scope.notif_x = response.data.results;
+			$scope.TEMP = response.data.results;
 		});
 	}
 });
