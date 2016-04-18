@@ -5,15 +5,23 @@
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
-
-
-
-var insertTemp = function(db, callback) {
-	   db.collection('DummyTemps').insertOne( {
-	      "DummyTemp" : 77
-	   }, function(err, result) {
-	    assert.equal(err, null);
-	    console.log("Inserted a document into the restaurants collection.");
-	    callback();
-	  });
-};
+var url = 'mongodb://localhost:27017/DummyTemps';
+	
+MongoClient.connect(url, function(err, db) {
+	console.log("WE ARE CONNECTED!")
+	
+	// Returns a random integer between min (included) and max (excluded)
+	// Using Math.round() will give you a non-uniform distribution!
+	function getRandomInt(min, max) {
+		return Math.floor(Math.random() * (max - min)) + min;
+	}
+	
+	
+	
+	for( var i = 0; i<10; i++){
+		var number = getRandomInt(30, 100);
+		console.log(number);
+		var record = { Temp: number, Time: i };
+		db.collection('DummyTemps').insert(record);
+	}
+});
