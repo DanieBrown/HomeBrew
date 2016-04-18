@@ -25,6 +25,15 @@ chart_view.controller('monitor_ctrl', function($scope) {
 			categories : [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
 					'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]
 		},
+		chart: {
+            renderTo: 'container',
+            
+            margin: [0, 0, 0, 0],
+            spacingTop: 0,
+            spacingBottom: 0,
+            spacingLeft: 0,
+            spacingRight: 0
+        },
 
 		series : [ {
 			data : [ 29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5,
