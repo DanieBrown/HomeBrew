@@ -104,6 +104,15 @@ chart_view.controller('input_ctrl',
 	}
 );
 
+//app.controller('ctrl02', function($scope, $http) {
+//    $http({
+//        method : 'GET',
+//        url : '/getTemp'
+//    }).then( function(response) {        
+//        $scope.t = response.data;
+//    });
+//});
+
 ////get temperatures
 //app.controller('tempList', function($scope, $http) {
 //	$scope.ListTemperatures = function() {
