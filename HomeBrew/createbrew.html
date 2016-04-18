@@ -1,4 +1,4 @@
-<html data-ng-app="chart_view_module">
+<html>
 <head>
 	<!--see reference: src="http://www.highcharts.com/blog/194-using-highcharts-with-angular-js"-->
 	<meta charset="utf-8">
@@ -9,11 +9,8 @@
     <meta name="author" content="J CUZ">
     
 	<title>Highcharts directive demo</title>
-	<script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-	
+    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>	
 	<!-- Custom styles for this template -->
     <link rel="stylesheet" type="text/css" href="style.css" />
     <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Abel|Exo|Raleway'>
@@ -29,7 +26,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
    
-	<script src="maddie_controller.js"></script>
+	<script src="controller.js"></script>
 </head>
 <body>
         <div class="col-md-1 col-md-offset-1" id="subtitle">
@@ -45,11 +42,17 @@
             <p>Patrick Yu</p>
         </div>
 
-        <div class="col-md-7" data-ng-controller="creator_ctrl">
-			<hc-chart options="chartOptions">Your new brew profile will show up here!</hc-chart>
-        </div>
-        
-        <!-- 
+	<div data-ng-app="new_brew_app">
+		<div data-ng-controller="new_brew_ctrl">
+			<input data-ng-model="highchartsNG.title.text">
+			<button data-ng-click="addSeries()">Add Series</button>
+			<button data-ng-click="addPoints()">Add Points to Random Series</button>
+			<button data-ng-click="removeRandomSeries()">Remove Random Series</button>
+			<button data-ng-click="swapChartType()">Line/Bar</button>
+			<highchart id="chart1" config="highchartsNG"></highchart>
+		</div>
+	</div>
+	<!-- 
         <div class="col-md-2" data-ng-controller="input_ctrl">
         	<div class="row">
         		<h2>Add a New Temp</h2>
@@ -70,6 +73,11 @@
 	        </div> 
         </div>     -->
     <!-- Custom scripts  -->
+    <script type="text/javascript" src="https://rawgit.com/pablojim/highcharts-ng/master/dist/highcharts-ng.js"></script>
+    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    
 	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js'></script>
 	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js'></script>
 	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js'></script>

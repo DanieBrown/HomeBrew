@@ -12,20 +12,19 @@ app.get('/getTemp', function(req, res) {
 });
 
 app.get('/getTime', function(req, res) {
-	var here = db.DummyTemps.find().toArray();
-	console.log(here);
-	var temps = [];
-	for( i = 0; i < here.length; i++) {
-		
-		console.log(here[i].Time);
-		
-		temps.add(here[i].Time);
-		
-	}
+	db.collection('DummyTemps').find().toArray(function(err, items) {
+		console.log(items);
+//		res.json(items);
+		console.log("len: "+items.length);
+		var fuck = [];
+		for (i = 0 ; i < items.length; i++) {
+			fuck.push(items[i].Time);
+			console.log("push:["+i+"]: "+items[i].Time);
+		}
+		console.log(fuck);
+		res.json(fuck);
+	});
 });
-
-
-
 
 /* serves main page */
 app.get("/", function(req, res) {
