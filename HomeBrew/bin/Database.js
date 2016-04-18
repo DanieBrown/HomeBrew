@@ -24,4 +24,5 @@ MongoClient.connect(url, function(err, db) {
 		var record = { Temp: number, Time: i };
 		db.collection('DummyTemps').insert(record);
 	}
+	//db.collection('DummyTemps').remove();
 });

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
+<!-- include bootstrap, jquery for easy div manipulation -->
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 <!-- Optional theme -->
@@ -12,26 +16,7 @@
 <body>
 	<div class = "container" data-ng-app = "GraphApp">
 		<div>
-			<h1>Temp Display 1</h1>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Temp</th>
-						<th>Time</th>
-					</tr>
-				</thead>
-				<tbody data-ng-controller = "ctrl01">
-					<tr data-ng-repeat = "tempD in tempList" >
-	            		<td>{{tempD.temp}}</td>
-	            		<td>{{tempD.time}}</td>
-	       			 </tr>
-				</tbody>
-			</table>
-		</div>
-	
-	
-		<div>
-			<h1>Temp Display 2</h1>
+			<h1>Temp Display</h1>
 			<table class="table">
 				<thead>
 					<tr>
