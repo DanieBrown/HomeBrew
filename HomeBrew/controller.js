@@ -10,21 +10,35 @@ var chart_view = angular.module('chart_view_module', ["highcharts-ng"]);
 //         $scope.db_name = response.data;
 //      });
 //   }
-var dataset;
-chart_view.controller('ctrl02', function($scope, $http) {
-    $http({
+//var dataset = [];
+//chart_view.controller('ctrl02', function($scope, $http) {
+//    $http({
+//        method : 'GET',
+//        url : '/getTemp'
+//    }).then( function(response) {        
+//        dataset = response.data;
+//       alert("response" + response.data);
+//    });
+//});
+
+chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
+//   $scope.dataset;
+   
+   $http({
         method : 'GET',
         url : '/getTemp'
     }).then( function(response) {        
-        dataset = response.data;
+        $scope.dataset = response.data;
     });
-});
-
-chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
-
-   $scope.schedule = function () {
-      alert("Saving this shit to the db: ");
-      alert($scope.highchartsNG.series[0].data);
+   
+   
+   $scope.populate = function () {
+//      var arr = json.parse($scope.dataset);
+      
+      
+      alert("First Time: " + $scope.dataset[0].Time);
+      alert("First Temp: " + $scope.dataset[0].Temp);
+      alert("dataset: " + $scope.dataset);
    }
 
    $scope.highchartsNG = {
@@ -45,7 +59,7 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
          }
       },
       series: [{
-         data: dataset
+         data: $scope.dataset
     }],
       title: {
          text: 'db.name'

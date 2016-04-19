@@ -6,12 +6,10 @@ var db = mongojs('DummyTemps', [ 'DummyTemps' ]);
 /* Server GET request */
 app.get('/getTemp', function(req, res) {
 	db.DummyTemps.find(function(err, docs) {
-		res.json(docs);
+       console.log(docs);
+       res.json(docs);
 	});
 });
-
-
-
 
 /* Server GET request */
 app.get('/getName', function(req, res) {
