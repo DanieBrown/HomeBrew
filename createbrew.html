@@ -1,0 +1,91 @@
+<html>
+<head>
+	<!--see reference: src="http://www.highcharts.com/blog/194-using-highcharts-with-angular-js"-->
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="ass">
+    <meta name="author" content="J CUZ">
+    
+	<title>Highcharts directive demo</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>	
+	<!-- Custom styles for this template -->
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Abel|Exo|Raleway'>
+    
+    <!-- ANGULAR STYLES -->
+    <link rel='stylesheet prefetch' href='https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.0-rc4/angular-material.css'>
+   	<link rel='stylesheet prefetch' href='https://material.angularjs.org/1.1.0-rc4/docs.css'>
+   	
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+   
+	<script src="controller.js"></script>
+</head>
+<body>
+        <div class="col-md-1 col-md-offset-1" id="subtitle">
+            <h2>OPTIMIZE YOUR BREW</h2>
+            <p>refresh.</p>
+            <p><button id="restart"> restart.</button></p>
+            <p><a href="https://github.ncsu.edu/wireless-sensors/HomeBrew/" >github</a></p><!--style="color:#516DA4;"-->
+            <br/>
+            <p><u>AUTHORS</u></p>
+            <p>Madison Hayes</p>
+            <p>Daniel Brown</p>
+            <p>Benjamin Wingo</p>
+            <p>Patrick Yu</p>
+        </div>
+
+	<div data-ng-app="new_brew_app">
+		<div data-ng-controller="new_brew_ctrl">
+			<input data-ng-model="highchartsNG.title.text">
+			<button data-ng-click="addSeries()">Add Series</button>
+			<button data-ng-click="addPoints()">Add Points to Random Series</button>
+			<button data-ng-click="removeRandomSeries()">Remove Random Series</button>
+			<button data-ng-click="swapChartType()">Line/Bar</button>
+			<highchart id="chart1" config="highchartsNG"></highchart>
+		</div>
+	</div>
+	<!-- 
+        <div class="col-md-2" data-ng-controller="input_ctrl">
+        	<div class="row">
+        		<h2>Add a New Temp</h2>
+	        </div>
+        	<div class="row">
+	        	Temp: <input data-ng-model="t1" type="text" autocomplete="off">
+	        </div>
+
+		<div data-ng-controller="date_ctrl" style="padding: 40px;" data-ng-cloak="" class="datepickerdemoBasicUsage row">
+			<md-content>
+				Date: 
+				<md-datepicker ng-model="myDate" md-placeholder="Enter date"></md-datepicker>
+			</md-content>
+		</div>
+
+		<div class="row">
+	            <button id="stop" class="btn btn-primary-outline btn-sm" data-ng-onclick="getNewTemp()">Add</button>
+	        </div> 
+        </div>     -->
+    <!-- Custom scripts  -->
+    <script type="text/javascript" src="https://rawgit.com/pablojim/highcharts-ng/master/dist/highcharts-ng.js"></script>
+    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js'></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js'></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js'></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js'></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js'></script>
+	<script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js'></script>
+	<script src='https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.0-rc4/angular-material.js'></script>
+
+   <script src="js/index.js"></script>
+</body>
+</html>
