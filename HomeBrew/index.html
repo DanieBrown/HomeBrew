@@ -33,11 +33,17 @@
          </div>
       </div>
 
-      <div class="jumbotron" data-ng-controller="ctrl03">
-         <h1></h1>
-         <p class="lead">Monitor your brew.</p>
-         <!--         <highchart id="chart1" config="highchartsNG"></highchart>-->
-         <hc-chart options="chartOptions">You do not have a brew running right now.</hc-chart>
+      <div class="jumbotron">
+         <div class="chartHeader">
+            <h1>Your Current Brew</h1>
+            <p class="lead">Monitor your brew.</p>
+         </div>
+
+         <div class="mychart" data-ng-controller="monitor_ctrl">
+            <highchart id="chart2" config="highchartsNG"></highchart>
+         </div>
+         <br>
+         <p class="text-right"><a class="btn btn-lg btn-primary" data-ng-click="populate()">Populate Graph</a></p>
       </div>
    </div>
 
