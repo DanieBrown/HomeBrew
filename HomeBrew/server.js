@@ -5,10 +5,22 @@ var db = mongojs('DummyTemps', [ 'DummyTemps' ]);
 
 /* Server GET request */
 app.get('/getTemp', function(req, res) {
-	db.DummyTemps.find(function(err, docs) {
-       console.log(docs);
-       res.json(docs);
+//	db.DummyTemps.find(function(err, docs) {
+//       console.log(docs);
+//       res.json(docs);
+//	});
+   db.collection('DummyTemps').find().toArray(function(err, shit) {
+		console.log(shit);
+		console.log("len: "+shit.length);
+		var fuck = [];
+		for (i = 0 ; i < shit.length; i++) {
+			fuck.push([shit[i].Time,shit[i].Temp]);
+		}
+		console.log(fuck);
+		res.json(fuck);
 	});
+   
+   
 });
 
 /* Server GET request */

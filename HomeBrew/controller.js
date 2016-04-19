@@ -22,7 +22,7 @@ var chart_view = angular.module('chart_view_module', ["highcharts-ng"]);
 //});
 
 chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
-//   $scope.dataset;
+   $scope.dataset = [];
    
    $http({
         method : 'GET',
@@ -31,14 +31,8 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
         $scope.dataset = response.data;
     });
    
-   
    $scope.populate = function () {
-//      var arr = json.parse($scope.dataset);
-      
-      
-      alert("First Time: " + $scope.dataset[0].Time);
-      alert("First Temp: " + $scope.dataset[0].Temp);
-      alert("dataset: " + $scope.dataset);
+      $scope.highchartsNG.series[0].data = $scope.dataset;
    }
 
    $scope.highchartsNG = {
