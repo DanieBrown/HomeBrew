@@ -19,7 +19,7 @@ MongoClient.connect(url, function(err, db) {
 		var number = getRandomInt(30, 100);
 		var today = new Date();
 		console.log(today);
-		var record = { Temp: number, Time: today };
+		var record = {Time: today, Temp: number, };
 		db.collection('DummyTemps').insert(record);
 	}
 	//db.collection('DummyTemps').remove();

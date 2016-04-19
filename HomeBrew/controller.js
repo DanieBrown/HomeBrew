@@ -162,7 +162,14 @@ newbrew.controller('create_ctrl', function ($scope, $timeout) {
    }
 
 });
-
+app.controller('ctrl03', function($scope, $http) {
+	$http({
+		method : 'GET',
+		url : '/getTemp'
+	}).then( function(response) {        
+		$scope.t = response.data;
+	});
+});
 
 
 

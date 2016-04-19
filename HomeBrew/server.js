@@ -10,6 +10,17 @@ app.get('/getTemp', function(req, res) {
 	});
 });
 
+
+
+
+/* Server GET request */
+app.get('/getName', function(req, res) {
+	db.stats(function(err, docs) {
+		var Name = docs.db;
+		res.json(Name);
+	});
+});
+
 app.get('/getTime', function(req, res) {
 	db.collection('DummyTemps').find().toArray(function(err, items) {
 		console.log(items);
