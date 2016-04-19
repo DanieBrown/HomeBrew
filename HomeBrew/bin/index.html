@@ -1,0 +1,53 @@
+<html>
+
+<head>
+   <!--see reference: src="http://www.highcharts.com/blog/194-using-highcharts-with-angular-js"-->
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+   <meta name="description" content="DAS MUH BEST FRIEND! YOU BETTA">
+   <meta name="author" content="madskillz">
+
+   <title>Monitor Your Brew</title>
+   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+   <!-- Custom styles for this template -->
+   <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+   <div class="container" data-ng-app="chart_view_module">
+      <div class="navbar navbar-default">
+         <div class="navbar-header">
+            <a class="navbar-brand" href="#">BrewMonitor</a>
+         </div>
+         <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+               <li class="active"><a href="index.html">Monitor</a></li>
+               <li><a href="create.html">Schedule</a></li>
+               <li><a href="about.html">About</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+               <li><a href="http://getbootstrap.com/customize">Customize</a></li>
+            </ul>
+         </div>
+      </div>
+
+      <div class="jumbotron" data-ng-controller="monitor_ctrl">
+         <h1>db-collection-name</h1>
+         <p class="lead">Monitor your brew.</p>
+         <!--         <highchart id="chart1" config="highchartsNG"></highchart>-->
+         <hc-chart options="chartOptions">You do not have a brew running right now.</hc-chart>
+      </div>
+   </div>
+
+   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+   <script src="controller.js"></script>
+   <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js'></script>
+   <script type="text/javascript" src="https://rawgit.com/pablojim/highcharts-ng/master/dist/highcharts-ng.js"></script>
+   <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</body>
+
+</html>

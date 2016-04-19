@@ -6,7 +6,6 @@ var db = mongojs('DummyTemps', [ 'DummyTemps' ]);
 /* Server GET request */
 app.get('/getTemp', function(req, res) {
 	db.DummyTemps.find(function(err, docs) {
-		console.log(docs);
 		res.json(docs);
 	});
 });
@@ -19,7 +18,6 @@ app.get('/getTime', function(req, res) {
 		var fuck = [];
 		for (i = 0 ; i < items.length; i++) {
 			fuck.push(items[i].Time);
-			console.log("push:["+i+"]: "+items[i].Time);
 		}
 		console.log(fuck);
 		res.json(fuck);

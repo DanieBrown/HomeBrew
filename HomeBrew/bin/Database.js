@@ -1,6 +1,3 @@
-/**
- * http://usejsdoc.org/
- */
 //Lets get started with the database
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
