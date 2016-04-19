@@ -35,7 +35,7 @@ app.get('/getTime', function(req, res) {
 
 /* serves main page */
 app.get("/", function(req, res) {
-	res.sendfile('index.htm')
+	res.sendfile('index.html')
 });
 
 app.post("/user/add", function(req, res) {
