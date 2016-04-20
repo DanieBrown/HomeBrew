@@ -1,6 +1,8 @@
 var express = require("express");
 var app = express();
 var mongojs = require('mongojs');
+//var db = require('mongoose');
+//db.connect('mongodb://localhost/DummyTemps');
 var db = mongojs('DummyTemps', [ 'DummyTemps' ]);
 
 /* Server GET request */
@@ -9,6 +11,7 @@ app.get('/getTemp', function(req, res) {
 //       console.log(docs);
 //       res.json(docs);
 //	});
+   
    db.collection('DummyTemps').find().toArray(function(err, shit) {
 		console.log(shit);
 		console.log("len: "+shit.length);
@@ -19,8 +22,6 @@ app.get('/getTemp', function(req, res) {
 		console.log(fuck);
 		res.json(fuck);
 	});
-   
-   
 });
 
 /* Server GET request */

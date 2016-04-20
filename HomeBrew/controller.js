@@ -103,16 +103,3 @@ newbrew.controller('create_ctrl', function ($scope, $timeout) {
    }
 
 });
-
-
-////get temperatures
-//app.controller('tempList', function($scope, $http) {
-//	$scope.ListTemperatures = function() {
-//		$http({
-//			method : 'GET',
-//			url : '/Database.js'
-//		}).then( function(response) {
-//			$scope.TEMP = response.data.results;
-//		});
-//	}
-//});

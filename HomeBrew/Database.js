@@ -25,4 +25,5 @@ MongoClient.connect(url, function (err, db) {
       };
       db.collection('DummyTemps').insert(record);
    }
+   db.close();
 });
