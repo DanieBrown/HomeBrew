@@ -1,29 +1,45 @@
 var express = require("express");
 var app = express();
-var mongojs = require('mongojs');
-var db = mongojs('DummyTemps', [ 'DummyTemps' ]);
+var fs = require("fs");
+var util = require('util');
+
+
+
+//Functionality for time stamps and dummy temps in a json text file
+// Returns a random integer between min (included) and max (excluded)
+// Using Math.round() will give you a non-uniform distribution!
+function getRandomInt(min, max) {
+	return Math.floor(Math.random() * (max - min)) + min;
+}
+var record = {
+		Temps: []
+};
+for( var i = 0; i<10; i++){
+	var number = getRandomInt(30, 100);
+	var today = new Date();
+	record.Temps.push({
+		"Temp": number,
+		"Time": today
+	});
+}
+
+//writes ['https://twitter.com/#!/101Cookbooks', 'http://www.facebook.com/101cookbooks']
+fs.writeFileSync('./file.json', util.inspect(record) , 'utf-8');
 
 /* Server GET request */
 app.get('/getTemp', function(req, res) {
-	db.DummyTemps.find(function(err, docs) {
-		console.log(docs);
-		res.json(docs);
-	});
+	res.json(record);
 });
 
 app.get('/getTime', function(req, res) {
-	db.collection('DummyTemps').find().toArray(function(err, items) {
-		console.log(items);
+		console.log(record);
 //		res.json(items);
-		console.log("len: "+items.length);
 		var fuck = [];
-		for (i = 0 ; i < items.length; i++) {
-			fuck.push(items[i].Time);
-			console.log("push:["+i+"]: "+items[i].Time);
+		for (i = 0 ; i < record.Temps.length; i++) {
+			fuck.push(record.Temps[i].Time);
+			console.log("push:["+i+"]: "+record.Temps[i].Time);
 		}
-		console.log(fuck);
 		res.json(fuck);
-	});
 });
 
 /* serves main page */
