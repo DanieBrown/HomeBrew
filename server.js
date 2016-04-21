@@ -2,6 +2,7 @@ var express = require("express");
 var app = express();
 var fs = require("fs");
 var util = require('util');
+var jsonfile = require('jsonfile');
 
 
 
@@ -23,23 +24,30 @@ for( var i = 0; i<10; i++){
 	});
 }
 
-//writes ['https://twitter.com/#!/101Cookbooks', 'http://www.facebook.com/101cookbooks']
-fs.writeFileSync('./file.json', util.inspect(record) , 'utf-8');
+
+//write the file
+var file = './file.json'
+jsonfile.writeFile(file, record, function(err) {
+	console.error(err);
+});
+
 
 /* Server GET request */
 app.get('/getTemp', function(req, res) {
-	res.json(record);
+	jsonfile.readFile('./file.json', function(err, obj) {
+		res.json(obj);
+	});
 });
 
 app.get('/getTime', function(req, res) {
-		console.log(record);
-//		res.json(items);
-		var fuck = [];
-		for (i = 0 ; i < record.Temps.length; i++) {
-			fuck.push(record.Temps[i].Time);
-			console.log("push:["+i+"]: "+record.Temps[i].Time);
-		}
-		res.json(fuck);
+		jsonfile.readFile('./file.json', function(err,obj){
+			
+			var fuck = [];
+			for (i = 0 ; i < obj.Temps.length; i++) {
+				fuck.push(obj.Temps[i].Time);
+			}
+			res.json(fuck);
+		});
 });
 
 /* serves main page */
