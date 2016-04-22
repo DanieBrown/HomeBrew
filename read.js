@@ -1,5 +1,6 @@
 var ds18b20 = require('ds18b20');
 var b = require('bonescript');
+var jsonfile = require('jsonfile');
 var ledHot = "P8_13";
 var ledCold = "P8_12";
 var state = 0;
@@ -25,6 +26,15 @@ setInterval(function () {
       //send temperature reading out to console
       if(valC != false) {
         valF = Math.round((valC * 1.8) + 32, -2);
+        var today = new Date();
+    	var record = {
+    		"Temp": valF,
+    		"Time": today
+    	};
+        var file = './file.json'
+        jsonfile.writeFile(file, record, function(err) {
+        	console.error(err);
+        });
       } else {
         valF = false;
       }
