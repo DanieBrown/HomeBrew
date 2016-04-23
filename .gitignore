@@ -1,9 +1,4 @@
 /.settings/
 /communication/
-/createbrew.html
-/index.html
-/maddie_controller.js
-/style.css
-/E2Server.js
-/dopefuckserver.js
 /bin/
+.classpath
