@@ -3,13 +3,14 @@ var app = express();
 var fs = require("fs");
 var util = require('util');
 var jsonfile = require('jsonfile');
-/*
+
 //Functionality for time stamps and dummy temps in a json text file
 // Returns a random integer between min (included) and max (excluded)
 // Using Math.round() will give you a non-uniform distribution!
 function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min;
 }
+
 var record = {
 		Temps: []
 };
@@ -24,13 +25,14 @@ for( var i = 0; i<10; i++){
 }
 
 //write the file
-var file = './file.json'
+var file = './file.json';
 jsonfile.writeFile(file, record, function(err) {
-	console.error(err);
+	if (err)
+       console.error(err);
 });
 
 
-/* Server GET request 
+/* Server GET request */
 app.get('/getTemp', function(req, res) {
 	jsonfile.readFile('./file.json', function(err, obj) {
 		res.json(obj);
@@ -46,11 +48,11 @@ app.get('/getTime', function(req, res) {
 			}
 			res.json(fuck);
 		});
-}); */
+});
 
 /* serves main page */
 app.get("/", function(req, res) {
-	res.sendfile('index.html')
+	res.sendfile('index.html');
 });
 
 app.post("/user/add", function(req, res) {
