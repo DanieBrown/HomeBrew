@@ -1,89 +1,8 @@
-var express = require("express");         // npm install --save express
-var app = express();
-var fs = require("fs");
-var util = require('util');
-var jsonfile = require('jsonfile');       // npm install --save jsonfile
-var bodyParser = require('body-parser');  // npm install --save body-parser
-//var favicon = require('serve-favicon');
-app.use(bodyParser.json());   // to de-serialize?
-//app.use(favicon(__dirname + '/img/fav-beer.ico'));
-
-/* Generate sample data to fill graph upon opening the page */
-// Functionality for time stamps and dummy temps in a json text file
-// Returns a random integer between min (included) and max (excluded)
-// Using Math.round() will give you a non-uniform distribution!
-function getRandomInt(min, max) {
-   return Math.floor(Math.random() * (max - min)) + min;
-}
-
-var sample_data = [];
-for( var i = 0; i<10; i++){
-var number = getRandomInt(30, 100);
-	var today = new Date();
-	sample_data.push({
-		"Time": today,
-		"Temp": number
-	});
-}
-
-// Add a sample data point to the sample data JSON object.
-setInterval(function () {
-   var sample_temp = getRandomInt(30, 100);
-   var sample_time = new Date();
-   sample_data.push({
-		"Time": sample_time,
-		"Temp": sample_temp
-	});
-   console.log("Generated: " + "[Time: "+sample_time+" , Temp: "+sample_temp+"]");
-}, 3000);
-
-//write the file
-var file = './current_brew.json';
-jsonfile.writeFile(file, sample_data, function (err) {
-   if (err)
-      console.error(err);
-});
-
-/* Server GET request */
-app.get('/getCurrentSchedule', function (req, res) {
-   jsonfile.readFile('./current_brew.json', function (err, jsonfile) {
-//      res.json(jsonfile);
-      res.json(sample_data);
-   });
-});
-
-app.post('/postNewSchedule', function (req, res) {
-   console.log("Called post method in controller.");
-   console.log(req.body);
-   jsonfile.writeFile('./next_brew.json', req.body, function (err) {
-   if (err)
-      console.error(err);
-   });
-});
-
-/* serves main page */
-app.get("/", function (req, res) {
-   res.sendfile('index.html');
-});
-
-/* serves all the static files */
-app.get(/^(.+)$/, function (req, res) {
-   console.log('static file request : ' + req.params);
-   res.sendfile(__dirname + req.params[0]);
-});
-
-var port = process.env.PORT || 5000;
-app.listen(port, function () {
-   console.log("Listening on " + port);
-//   console.log("full path is: " + (__dirname + '/img/favicon.ico'));
-});
-
 ///** Everything Below Here is for Reading Temperature Sensors */
 //var ds18b20 = require('ds18b20');   // npm install --save ds18b20
 //var b = require('bonescript');
 //var fs = require('fs');
 //var led = "P8_13";
-//var state = 0;
 //var tempTarget = 75;
 //b.pinMode(led, 'out');
 //var inId = '28-00000521bec2';
@@ -130,3 +49,96 @@ app.listen(port, function () {
 //}, interval);
 //
 //b.digitalWrite(led, 0);
+
+var express = require("express"); // npm install --save express
+var app = express();
+var fs = require("fs");
+var util = require('util');
+var jsonfile = require('jsonfile'); // npm install --save jsonfile
+var bodyParser = require('body-parser'); // npm install --save body-parser
+// var favicon = require('serve-favicon');
+app.use(bodyParser.json()); // to de-serialize?
+// app.use(favicon(__dirname + '/img/fav-beer.ico'));
+
+/* Generate sample data to fill graph upon opening the page */
+// Functionality for time stamps and dummy temps in a json text file
+// Returns a random integer between min (included) and max (excluded)
+// Using Math.round() will give you a non-uniform distribution!
+
+
+var state = 0;
+
+
+function getRandomInt(min, max) {
+	return Math.floor(Math.random() * (max - min)) + min;
+}
+
+var sample_data = [];
+for (var i = 0; i < 10; i++) {
+	var number = getRandomInt(30, 100);
+	var today = new Date();
+	sample_data.push({
+		"Time" : today,
+		"Temp" : number
+	});
+}
+
+// Add a sample data point to the sample data JSON object.
+
+setInterval(function() {
+	var sample_temp = getRandomInt(30, 100);
+	var sample_time = new Date();
+	sample_data.push({
+		"Time" : sample_time,
+		"Temp" : sample_temp,
+		"Heating" : state
+	});
+	console.log("Generated: " + "[Time: " + sample_time + " , Temp: "
+			+ sample_temp + "], State = " + state);
+	var file = './sensor_data.json';
+	jsonfile.writeFile(file, sample_data, function(err) {
+		if (err)
+			console.error(err);
+	});
+}, 3000);
+
+// write the file
+var file = './current_brew.json';
+jsonfile.writeFile(file, sample_data, function(err) {
+	if (err)
+		console.error(err);
+});
+
+/* Server GET request */
+app.get('/getCurrentSchedule', function(req, res) {
+	jsonfile.readFile('./current_brew.json', function(err, jsonfile) {
+		// res.json(jsonfile);
+		res.json(sample_data);
+	});
+});
+
+app.post('/postNewSchedule', function(req, res) {
+	console.log("Called post method in controller.");
+	console.log(req.body);
+	jsonfile.writeFile('./next_brew.json', req.body, function(err) {
+		if (err)
+			console.error(err);
+	});
+});
+
+/* serves main page */
+app.get("/", function(req, res) {
+	res.sendfile('index.html');
+});
+
+/* serves all the static files */
+app.get(/^(.+)$/, function(req, res) {
+	console.log('static file request : ' + req.params);
+	res.sendfile(__dirname + req.params[0]);
+});
+
+var port = process.env.PORT || 5000;
+app.listen(port, function() {
+	console.log("Listening on " + port);
+	// console.log("full path is: " + (__dirname + '/img/favicon.ico'));
+});
