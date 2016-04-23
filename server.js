@@ -3,6 +3,8 @@ var app = express();
 var fs = require("fs");
 var util = require('util');
 var jsonfile = require('jsonfile');
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
 
 // Functionality for time stamps and dummy temps in a json text file
 // Returns a random integer between min (included) and max (excluded)
@@ -11,38 +13,44 @@ function getRandomInt(min, max) {
    return Math.floor(Math.random() * (max - min)) + min;
 }
 
-var gucci = [];
+var sample_brew = [];
 for( var i = 0; i<10; i++){
 var number = getRandomInt(30, 100);
 	var today = new Date();
-	gucci.push({
+	sample_brew
+       .push({
 		"Temp": number,
 		"Time": today
 	});
 }
 
 //write the file
-var file = './file.json';
-jsonfile.writeFile(file, gucci, function (err) {
+var file = './current_brew.json';
+jsonfile.writeFile(file, sample_brew
+                   , function (err) {
    if (err)
       console.error(err);
 });
 
 /* Server GET request */
-app.get('/getTemp', function (req, res) {
-   jsonfile.readFile('./file.json', function (err, jsonfile) {
-	  var records = [];
-      console.log("jsonfile\n" + jsonfile);
-      for (i = 0; i < jsonfile.length; i++) {
-         records.push([jsonfile[i].Time, jsonfile[i].Temp]);
-      }
-      console.log("records\n" + records);
-      res.json(records);
+app.get('/getCurrentSchedule', function (req, res) {
+   jsonfile.readFile('./current_brew.
+                    json', function (err, jsonfile) {
+      res.json(jsonfile);
+   });
+});
+
+app.post('/postNewSchedule', function (req, res) {
+   console.log("Data posted from controller: " + req.body);
+   jsonfile.writeFile('./next_brew.json', req.body, function (err) {
+   if (err)
+      console.error(err);
    });
 });
 
 app.get('/getTime', function (req, res) {
-   jsonfile.readFile('./file.json', function (err, obj) {
+   jsonfile.readFile('./current_brew.
+                    json', function (err, obj) {
 
       var fuck = [];
       for (i = 0; i < obj.Temps.length; i++) {
