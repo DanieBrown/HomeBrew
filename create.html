@@ -1,96 +1,91 @@
 <html>
-
 <head>
-   <!--see reference: src="http://www.highcharts.com/blog/194-using-highcharts-with-angular-js"-->
-   <meta charset="utf-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <meta name="viewport" content="width=device-width, initial-scale=1">
-   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-   <meta name="description" content="ass">
-   <meta name="author" content="J CUZ">
-
-   <title>Create a Schedule</title>
-   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-   <!-- Custom styles for this template -->
-   <link rel="stylesheet" type="text/css" href="style.css" />
-   <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Abel|Exo|Raleway'>
+	<!--see reference: src="http://www.highcharts.com/blog/194-using-highcharts-with-angular-js"-->
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="ass">
+    <meta name="author" content="J CUZ">
+    
+	<title>Highcharts directive demo</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>	
+	<!-- Custom styles for this template -->
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel='stylesheet' type='text/css'href='https://fonts.googleapis.com/css?family=Abel|Exo|Raleway'>
+    
+    <!-- ANGULAR STYLES -->
+    <link rel='stylesheet prefetch' href='https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.0-rc4/angular-material.css'>
+   	<link rel='stylesheet prefetch' href='https://material.angularjs.org/1.1.0-rc4/docs.css'>
+   	
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+   
+	<script src="controller.js"></script>
 </head>
-
 <body>
-   <div class="container" data-ng-app="new_brew_app">
-      <div class="navbar navbar-default">
-         <div class="navbar-header">
-            <a class="navbar-brand" href="#">BrewMonitor</a>
-         </div>
-         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-               <li class="dropdown active">
-<!--
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Getting started <b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                     <li><a href="http://getbootstrap.com/getting-started/#download">Download Bootstrap</a></li>
-                     <li class="divider"></li>
-                     <li class="dropdown-header">Examples</li>
-                     <li><a href="getName">http:getName</a></li>
-                     <li><a href="http://getbootstrap.com/examples/sticky-footer/">Sticky footer</a></li>
-                     <li><a href="http://getbootstrap.com/examples/offcanvas/">Offcanvas</a></li>
-                     <li><a href="http://getbootstrap.com/examples/carousel/">Carousel</a></li>
-                     <li><a href="http://getbootstrap.com/examples/theme/">Theme</a></li>
-                     <li class="divider"></li>
-                     <li class="dropdown-header">HTTP Requests</li>
-                     <li><a href="getName">getName</a></li>
-                     <li><a href="http://getbootstrap.com/getting-started/#browsers">Additional Things 2</a></li>
-                  </ul>
--->
-               </li>
-               <li><a href="index.html">Monitor</a></li>
-               <li class="active"><a href="create.html">Schedule</a></li>
-               <li><a href="about.html">About</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-               <li class="active"><a href="http://getbootstrap.com/customize">Customize</a></li>
-            </ul>
-         </div>
-      </div>
+        <div class="col-md-1 col-md-offset-1" id="subtitle">
+            <h2>OPTIMIZE YOUR BREW</h2>
+            <p>refresh.</p>
+            <p><button id="restart"> restart.</button></p>
+            <p><a href="https://github.ncsu.edu/wireless-sensors/HomeBrew/" >github</a></p><!--style="color:#516DA4;"-->
+            <br/>
+            <p><u>AUTHORS</u></p>
+            <p>Madison Hayes</p>
+            <p>Daniel Brown</p>
+            <p>Benjamin Wingo</p>
+            <p>Patrick Yu</p>
+        </div>
 
-      <div class="jumbotron" data-ng-controller="create_ctrl">
-         <h2>Create a Brew</h2>
-         <p class="lead">Build your new brew temperature profile.</p>
-         <highchart id="chart1" config="highchartsNG"></highchart>
-         <div class="form-group">
-            <!-- New Temperature Input -->
-            <label for="brew-name" class="control-label">Schedule Name:</label>
-            <div class="control">
-               <input id="brew-name" class="form-control"  data-ng-model="highchartsNG.title.text">
-            </div>
-         </div>
-         <div class="form-group">
-            <!-- New Temperature Input -->
-            <label for="new-temp" class="control-label">Temperature:</label>
-            <div class="control">
-               <input id="new-temp" class="form-control" type="number" data-ng-model="point.temp">
-            </div>
-         </div>
+	<div data-ng-app="new_brew_app">
+		<div data-ng-controller="new_brew_ctrl">
+			<input data-ng-model="highchartsNG.title.text">
+			<button data-ng-click="addSeries()">Add Series</button>
+			<button data-ng-click="addPoints()">Add Points to Random Series</button>
+			<button data-ng-click="removeRandomSeries()">Remove Random Series</button>
+			<button data-ng-click="swapChartType()">Line/Bar</button>
+			<highchart id="chart1" config="highchartsNG"></highchart>
+		</div>
+	</div>
+	<!-- 
+        <div class="col-md-2" data-ng-controller="input_ctrl">
+        	<div class="row">
+        		<h2>Add a New Temp</h2>
+	        </div>
+        	<div class="row">
+	        	Temp: <input data-ng-model="t1" type="text" autocomplete="off">
+	        </div>
 
-         <div class="form-group">
-            <!-- New Datetime Input -->
-            <label for="new-time" class="control-label">Date & Time:</label>
-            <div class="control">
-               <input id="new-time" class="form-control" type="datetime-local" data-ng-model="point.time">
-            </div>
-         </div>
+		<div data-ng-controller="date_ctrl" style="padding: 40px;" data-ng-cloak="" class="datepickerdemoBasicUsage row">
+			<md-content>
+				Date: 
+				<md-datepicker ng-model="myDate" md-placeholder="Enter date"></md-datepicker>
+			</md-content>
+		</div>
 
-         <p><a class="btn btn-lg btn-primary" data-ng-click="addPoint(point)">Add Point</a></p>
-      </div>
-   </div>
+		<div class="row">
+	            <button id="stop" class="btn btn-primary-outline btn-sm" data-ng-onclick="getNewTemp()">Add</button>
+	        </div> 
+        </div>     -->
+    <!-- Custom scripts  -->
+    <script type="text/javascript" src="https://rawgit.com/pablojim/highcharts-ng/master/dist/highcharts-ng.js"></script>
+    <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js'></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js'></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js'></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js'></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js'></script>
+	<script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js'></script>
+	<script src='https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.0-rc4/angular-material.js'></script>
 
-   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-   <script src="controller.js"></script>
-   <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js'></script>
-   <script type="text/javascript" src="https://rawgit.com/pablojim/highcharts-ng/master/dist/highcharts-ng.js"></script>
-   <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+   <script src="js/index.js"></script>
 </body>
-
 </html>
