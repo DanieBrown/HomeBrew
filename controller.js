@@ -1,26 +1,6 @@
 /* Controller */
 var chart_view = angular.module('chart_view_module', ["highcharts-ng"]);
 
-//chart_view.controller('chart_header_ctrl'),
-//   function ($scope, $http) {
-//      $http({
-//         method: 'GET',
-//         url: '/getName'
-//      }).then(function (response) {
-//         $scope.db_name = response.data;
-//      });
-//   }
-//var dataset = [];
-//chart_view.controller('ctrl02', function($scope, $http) {
-//    $http({
-//        method : 'GET',
-//        url : '/getTemp'
-//    }).then( function(response) {        
-//        dataset = response.data;
-//       alert("response" + response.data);
-//    });
-//});
-
 chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
    $scope.dataset = [];
    
@@ -103,16 +83,3 @@ newbrew.controller('create_ctrl', function ($scope, $timeout) {
    }
 
 });
-
-
-////get temperatures
-//app.controller('tempList', function($scope, $http) {
-//	$scope.ListTemperatures = function() {
-//		$http({
-//			method : 'GET',
-//			url : '/Database.js'
-//		}).then( function(response) {
-//			$scope.TEMP = response.data.results;
-//		});
-//	}
-//});
