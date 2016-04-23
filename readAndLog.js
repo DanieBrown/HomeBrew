@@ -24,7 +24,7 @@ setInterval(function () {
     ds18b20.temperature(id, function (err, val) {
       //send temperature reading out to console
       valC = val;
-      while (valC = false) {
+      while (valC == false) {
         ds18b20.temperature(id, function (err, valTemp) {
           valC = valTemp;
         });
@@ -40,7 +40,7 @@ setInterval(function () {
         state=0;
       }
       if(id == inId && valF < tempTarget || id == inId && valF > tempTarget) {
-        fs.writeFile('log.txt', 'Temp: ' + valF + ' Time: ' + Date.now, 'utf8', callback);
+        fs.writeFile('log.txt', 'Temp: ' + valF + ' Time: ' + Date.now, 'utf8');
       }
       b.digitalWrite(led, state);
       console.log('id: ',id,' value in C: ',valC,' value in F: ',valF);
