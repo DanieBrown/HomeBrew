@@ -12,8 +12,8 @@ function getRandomInt(min, max) {
 }
 
 var records = [];
-//for( var i = 0; i<10; i++){
-//	var number = getRandomInt(30, 100);
+for( var i = 0; i<10; i++){
+var number = getRandomInt(30, 100);
 //	var today = new Date();
 //	records.push({
 //		"Temp": number,
