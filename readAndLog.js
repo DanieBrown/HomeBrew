@@ -24,11 +24,11 @@ setInterval(function () {
     ds18b20.temperature(id, function (err, val) {
       //send temperature reading out to console
       valC = val;
-      while (valC == false) {
-        ds18b20.temperature(id, function (err, valTemp) {
-          valC = valTemp;
-        });
-      }
+//      while (valC == false) {
+//        ds18b20.temperature(id, function (err, valTemp) {
+//          valC = valTemp;
+//        });
+//      }
       if(valC != false) {
         valF = Math.round((valC * 1.8) + 32, -2);
       } else {
@@ -39,9 +39,9 @@ setInterval(function () {
       } else if (id == inId && valF != false ) {
         state=0;
       }
-      if(id == inId && valF < tempTarget || id == inId && valF > tempTarget) {
-        fs.writeFile('log.txt', 'Temp: ' + valF + ' Time: ' + Date.now, 'utf8');
-      }
+//      if(id == inId && valF < tempTarget || id == inId && valF > tempTarget) {
+//        fs.writeFile('log.txt', 'Temp: ' + valF + ' Time: ' + Date.now, 'utf8');
+//      }
       b.digitalWrite(led, state);
       console.log('id: ',id,' value in C: ',valC,' value in F: ',valF);
     });
