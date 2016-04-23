@@ -21,10 +21,21 @@ for( var i = 0; i<10; i++){
 var number = getRandomInt(30, 100);
 	var today = new Date();
 	sample_data.push({
-		"Temp": number,
-		"Time": today
+		"Time": today,
+		"Temp": number
 	});
 }
+
+// Add a sample data point to the sample data JSON object.
+setInterval(function () {
+   var sample_temp = getRandomInt(30, 100);
+   var sample_time = new Date();
+   sample_data.push({
+		"Time": sample_time,
+		"Temp": sample_temp
+	});
+   console.log("Generated: " + "[Time: "+sample_time+" , Temp: "+sample_temp+"]");
+}, 3000);
 
 //write the file
 var file = './current_brew.json';
@@ -36,7 +47,8 @@ jsonfile.writeFile(file, sample_data, function (err) {
 /* Server GET request */
 app.get('/getCurrentSchedule', function (req, res) {
    jsonfile.readFile('./current_brew.json', function (err, jsonfile) {
-      res.json(jsonfile);
+//      res.json(jsonfile);
+      res.json(sample_data);
    });
 });
 
@@ -66,55 +78,55 @@ app.listen(port, function () {
 //   console.log("full path is: " + (__dirname + '/img/favicon.ico'));
 });
 
-/** Everything Below Here is for Reading Temperature Sensors */
-var ds18b20 = require('ds18b20');   // npm install --save ds18b20
-var b = require('bonescript');
-var fs = require('fs');
-var led = "P8_13";
-var state = 0;
-var tempTarget = 75;
-b.pinMode(led, 'out');
-var inId = '28-00000521bec2';
-var outId = '28-000005218965';
-var sensorId = [];
-ds18b20.sensors(function (err, id) {
-  sensorId = id;
-  //console.log(id)
-});
-
-var interval = 5000;
-var valC = 0;
-var valF = 0;
-
-b.digitalWrite(led, 0);
-
-setInterval(function () {
-  sensorId.forEach(function (id) {
-    ds18b20.temperature(id, function (err, val) {
-      //send temperature reading out to console
-      valC = val;
-//      while (valC == false) {
-//        ds18b20.temperature(id, function (err, valTemp) {
-//          valC = valTemp;
-//        });
+///** Everything Below Here is for Reading Temperature Sensors */
+//var ds18b20 = require('ds18b20');   // npm install --save ds18b20
+//var b = require('bonescript');
+//var fs = require('fs');
+//var led = "P8_13";
+//var state = 0;
+//var tempTarget = 75;
+//b.pinMode(led, 'out');
+//var inId = '28-00000521bec2';
+//var outId = '28-000005218965';
+//var sensorId = [];
+//ds18b20.sensors(function (err, id) {
+//  sensorId = id;
+//  //console.log(id)
+//});
+//
+//var interval = 5000;
+//var valC = 0;
+//var valF = 0;
+//
+//b.digitalWrite(led, 0);
+//
+//setInterval(function () {
+//  sensorId.forEach(function (id) {
+//    ds18b20.temperature(id, function (err, val) {
+//      //send temperature reading out to console
+//      valC = val;
+////      while (valC == false) {
+////        ds18b20.temperature(id, function (err, valTemp) {
+////          valC = valTemp;
+////        });
+////      }
+//      if(valC != false) {
+//        valF = Math.round((valC * 1.8) + 32, -2);
+//      } else {
+//        valF = false;
 //      }
-      if(valC != false) {
-        valF = Math.round((valC * 1.8) + 32, -2);
-      } else {
-        valF = false;
-      }
-      if(id == inId && valF < tempTarget) {
-        state=1;
-      } else if (id == inId && valF != false ) {
-        state=0;
-      }
-//      if(id == inId && valF < tempTarget || id == inId && valF > tempTarget) {
-//        fs.writeFile('log.txt', 'Temp: ' + valF + ' Time: ' + Date.now, 'utf8');
+//      if(id == inId && valF < tempTarget) {
+//        state=1;
+//      } else if (id == inId && valF != false ) {
+//        state=0;
 //      }
-      b.digitalWrite(led, state);
-      console.log('id: ',id,' value in C: ',valC,' value in F: ',valF);
-    });
-  });
-}, interval);
-
-b.digitalWrite(led, 0);
+////      if(id == inId && valF < tempTarget || id == inId && valF > tempTarget) {
+////        fs.writeFile('log.txt', 'Temp: ' + valF + ' Time: ' + Date.now, 'utf8');
+////      }
+//      b.digitalWrite(led, state);
+//      console.log('id: ',id,' value in C: ',valC,' value in F: ',valF);
+//    });
+//  });
+//}, interval);
+//
+//b.digitalWrite(led, 0);
