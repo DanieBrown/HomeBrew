@@ -1,10 +1,10 @@
-var express = require("express");
+var express = require("express");         // npm install --save express
 var app = express();
 var fs = require("fs");
 var util = require('util');
-var jsonfile = require('jsonfile');
-var bodyParser = require('body-parser');
-app.use(bodyParser.json());
+var jsonfile = require('jsonfile');       // npm install --save jsonfile
+var bodyParser = require('body-parser');  // npm install --save body-parser
+app.use(bodyParser.json());   // to de-serialize?
 
 // Functionality for time stamps and dummy temps in a json text file
 // Returns a random integer between min (included) and max (excluded)
@@ -13,12 +13,11 @@ function getRandomInt(min, max) {
    return Math.floor(Math.random() * (max - min)) + min;
 }
 
-var sample_brew = [];
+var sample_data = [];
 for( var i = 0; i<10; i++){
 var number = getRandomInt(30, 100);
 	var today = new Date();
-	sample_brew
-       .push({
+	sample_data.push({
 		"Temp": number,
 		"Time": today
 	});
@@ -26,22 +25,21 @@ var number = getRandomInt(30, 100);
 
 //write the file
 var file = './current_brew.json';
-jsonfile.writeFile(file, sample_brew
-                   , function (err) {
+jsonfile.writeFile(file, sample_data, function (err) {
    if (err)
       console.error(err);
 });
 
 /* Server GET request */
 app.get('/getCurrentSchedule', function (req, res) {
-   jsonfile.readFile('./current_brew.
-                    json', function (err, jsonfile) {
+   jsonfile.readFile('./current_brew.json', function (err, jsonfile) {
       res.json(jsonfile);
    });
 });
 
 app.post('/postNewSchedule', function (req, res) {
-   console.log("Data posted from controller: " + req.body);
+   console.log("Called post method in controller.");
+   console.log(req.body);
    jsonfile.writeFile('./next_brew.json', req.body, function (err) {
    if (err)
       console.error(err);
@@ -49,8 +47,7 @@ app.post('/postNewSchedule', function (req, res) {
 });
 
 app.get('/getTime', function (req, res) {
-   jsonfile.readFile('./current_brew.
-                    json', function (err, obj) {
+   jsonfile.readFile('./file.json', function (err, obj) {
 
       var fuck = [];
       for (i = 0; i < obj.Temps.length; i++) {
