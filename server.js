@@ -11,19 +11,19 @@ function getRandomInt(min, max) {
    return Math.floor(Math.random() * (max - min)) + min;
 }
 
-var records = [];
+var gucci = [];
 for( var i = 0; i<10; i++){
 var number = getRandomInt(30, 100);
-//	var today = new Date();
-//	records.push({
-//		"Temp": number,
-//		"Time": today
-//	});
-//}
+	var today = new Date();
+	gucci.push({
+		"Temp": number,
+		"Time": today
+	});
+}
 
 //write the file
 var file = './file.json';
-jsonfile.writeFile(file, records, function (err) {
+jsonfile.writeFile(file, gucci, function (err) {
    if (err)
       console.error(err);
 });
@@ -31,6 +31,7 @@ jsonfile.writeFile(file, records, function (err) {
 /* Server GET request */
 app.get('/getTemp', function (req, res) {
    jsonfile.readFile('./file.json', function (err, jsonfile) {
+	  var records = [];
       console.log("jsonfile\n" + jsonfile);
       for (i = 0; i < jsonfile.length; i++) {
          records.push([jsonfile[i].Time, jsonfile[i].Temp]);
