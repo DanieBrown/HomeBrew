@@ -1,7 +1,16 @@
 ///** Everything Below Here is for Reading Temperature Sensors */
+var express = require("express"); // npm install --save express
+var app = express();
+var fs = require("fs");
+var util = require('util');
+var jsonfile = require('jsonfile'); // npm install --save jsonfile
+var bodyParser = require('body-parser'); // npm install --save body-parser
+   // var favicon = require('serve-favicon');
+app.use(bodyParser.json()); // to de-serialize?
+   // app.use(favicon(__dirname + '/img/fav-beer.ico'));
+
 var ds18b20 = require('ds18b20'); // npm install --save ds18b20
 var b = require('bonescript');
-var fs = require('fs');
 var led = "P8_13";
 var tempTarget = 75;
 b.pinMode(led, 'out');
@@ -9,6 +18,8 @@ var state = 0;
 var inId = '28-00000521bec2';
 var outId = '28-000005218965';
 var sensorId = [];
+
+// set sensor IDs?
 ds18b20.sensors(function (err, id) {
    sensorId = id;
    //console.log(id)
@@ -26,11 +37,7 @@ setInterval(function () {
       ds18b20.temperature(id, function (err, val) {
          //send temperature reading out to console
          valC = val;
-         //      while (valC == false) {
-         //        ds18b20.temperature(id, function (err, valTemp) {
-         //          valC = valTemp;
-         //        });
-         //      }
+         
          if (valC != false) {
             valF = Math.round((valC * 1.8) + 32, -2);
          } else {
@@ -41,16 +48,16 @@ setInterval(function () {
          } else if (id == inId && valF != false) {
             state = 0;
          }
-         //      if(id == inId && valF < tempTarget || id == inId && valF > tempTarget) {
-         //        fs.writeFile('log.txt', 'Temp: ' + valF + ' Time: ' + Date.now, 'utf8');
-         //      }
+
          b.digitalWrite(led, state);
          console.log('id: ', id, ' value in C: ', valC, ' value in F: ', valF);
+         var time = new Date();
+         // log to json file
          if (id === "28-000005218965") {
             // Log to temporary json array.
             sensor_data_array.push({
                "28-000005218965": {
-                  "Time": new Date(),
+                  "Time": time,
                   "Temp": valF,
                   "Heating": state                  
                }
@@ -58,7 +65,7 @@ setInterval(function () {
          } else {
             sensor_data_array.push({
                "28-00000521bec2": {
-                  "Time": new Date(),
+                  "Time": time,
                   "Temp": valF,
                   "Heating": state                  
                }
@@ -78,24 +85,11 @@ function logSensorData() {
 
 b.digitalWrite(led, 0);
 
-var express = require("express"); // npm install --save express
-var app = express();
-var fs = require("fs");
-var util = require('util');
-var jsonfile = require('jsonfile'); // npm install --save jsonfile
-var bodyParser = require('body-parser'); // npm install --save body-parser
-// var favicon = require('serve-favicon');
-app.use(bodyParser.json()); // to de-serialize?
-// app.use(favicon(__dirname + '/img/fav-beer.ico'));
 
 /* Generate sample data to fill graph upon opening the page */
 // Functionality for time stamps and dummy temps in a json text file
 // Returns a random integer between min (included) and max (excluded)
 // Using Math.round() will give you a non-uniform distribution!
-
-
-var state = 0;
-
 
 function getRandomInt(min, max) {
    return Math.floor(Math.random() * (max - min)) + min;
@@ -111,25 +105,6 @@ for (var i = 0; i < 10; i++) {
    });
 }
 
-// Add a sample data point to the sample data JSON object.
-
-//setInterval(function() {
-//	var sample_temp = getRandomInt(30, 100);
-//	var sample_time = new Date();
-//	sample_data.push({
-//		"Time" : sample_time,
-//		"Temp" : sample_temp,
-//		"Heating" : state
-//	});
-//	console.log("Generated: " + "[Time: " + sample_time + " , Temp: "
-//			+ sample_temp + "], State = " + state);
-//	var file = './sensor_data.json';
-//	jsonfile.writeFile(file, sample_data, function(err) {
-//		if (err)
-//			console.error(err);
-//	});
-//}, 3000);
-
 // write the file
 var file = './current_brew.json';
 jsonfile.writeFile(file, sample_data, function (err) {
@@ -137,19 +112,21 @@ jsonfile.writeFile(file, sample_data, function (err) {
       console.error(err);
 });
 
-/* Server GET request */
+// Get JSON object of sensor data
 app.get('/getSensorData', function (req, res) {
    jsonfile.readFile('./sensor_data.json', function (err, jsonfile) {
       res.json(jsonfile);
    });
 });
 
+// Get JSON object of the current schedule (non changing)
 app.get('/getCurrentSchedule', function (req, res) {
    jsonfile.readFile('./current_brew.json', function (err, jsonfile) {
       res.json(jsonfile);
    });
 });
 
+// Write data from create.html to JSON file for the next schedule
 app.post('/postNewSchedule', function (req, res) {
    console.log("Called post method in controller.");
    console.log(req.body);
