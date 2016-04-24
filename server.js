@@ -17,6 +17,7 @@ ds18b20.sensors(function (err, id) {
 var interval = 5000;
 var valC = 0;
 var valF = 0;
+var sensor_data_array = [];
 
 b.digitalWrite(led, 0);
 
@@ -45,25 +46,35 @@ setInterval(function () {
          //      }
          b.digitalWrite(led, state);
          console.log('id: ', id, ' value in C: ', valC, ' value in F: ', valF);
-         
-         // Log to temporary json array.
-         var sensor_data_array = [];
-         sensor_data_array.push({
-           "Time" : new Date(),
-           "Temp" : valF,
-           "Heating" : state
-	     });
-         
-         // Add to json file of temp readings.
-         var file = './sensor_data.json';
-         jsonfile.writeFile(file, sensor_data_array, function (err) {
-            if (err)
-               console.error(err);
-         });
-
+         if (id === "28-000005218965") {
+            // Log to temporary json array.
+            sensor_data_array.push({
+               "28-000005218965": {
+                  "Time": new Date(),
+                  "Temp": valF,
+                  "Heating": state                  
+               }
+            });
+         } else {
+            sensor_data_array.push({
+               "28-00000521bec2": {
+                  "Time": new Date(),
+                  "Temp": valF,
+                  "Heating": state                  
+               }
+            });
+         }
       });
    });
 }, interval);
+
+
+function logSensorData() {
+   jsonfile.writeFile('./sensor_data.json', sensor_data_array, function (err) {
+      if (err)
+         console.error(err);
+   });
+}
 
 b.digitalWrite(led, 0);
 
@@ -129,13 +140,13 @@ jsonfile.writeFile(file, sample_data, function (err) {
 /* Server GET request */
 app.get('/getSensorData', function (req, res) {
    jsonfile.readFile('./sensor_data.json', function (err, jsonfile) {
-       res.json(jsonfile);
+      res.json(jsonfile);
    });
 });
 
 app.get('/getCurrentSchedule', function (req, res) {
    jsonfile.readFile('./current_brew.json', function (err, jsonfile) {
-       res.json(jsonfile);
+      res.json(jsonfile);
    });
 });
 
@@ -165,24 +176,30 @@ app.listen(port, function () {
    // console.log("full path is: " + (__dirname + '/img/favicon.ico'));
 });
 
-process.stdin.resume();//so the program will not close instantly
+process.stdin.resume(); //so the program will not close instantly
 
 
 /* Turn off the Heater GPIO when the app closes! */
 function exitHandler(options, err) {
-    if (options.cleanup) console.log('clean');
-    if (err) console.log(err.stack);
-    if (options.exit) process.exit();
-    if (state == 1) {
-        b.digitalWrite(led, 0);
-    }
+   if (options.cleanup) console.log('clean');
+   if (err) console.log(err.stack);
+   if (options.exit) process.exit();
+   if (state == 1) {
+      b.digitalWrite(led, 0);
+   }
 }
 
 //do something when app is closing
-process.on('exit', exitHandler.bind(null,{cleanup:true}));
+process.on('exit', exitHandler.bind(null, {
+   cleanup: true
+}));
 
 //catches ctrl+c event
-process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+process.on('SIGINT', exitHandler.bind(null, {
+   exit: true
+}));
 
 //catches uncaught exceptions
-process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
+process.on('uncaughtException', exitHandler.bind(null, {
+   exit: true
+}));
