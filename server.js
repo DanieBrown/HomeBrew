@@ -8,9 +8,9 @@ var fs = require("fs");
 var util = require('util');
 var jsonfile = require('jsonfile'); // npm install --save jsonfile
 var bodyParser = require('body-parser'); // npm install --save body-parser
-   // var favicon = require('serve-favicon');
+// var favicon = require('serve-favicon');
 app.use(bodyParser.json()); // to de-serialize?
-   // app.use(favicon(__dirname + '/img/fav-beer.ico'));
+// app.use(favicon(__dirname + '/img/fav-beer.ico'));
 
 var ds18b20 = require('ds18b20'); // npm install --save ds18b20
 var b = require('bonescript');
@@ -40,7 +40,7 @@ setInterval(function () {
       ds18b20.temperature(id, function (err, val) {
          //send temperature reading out to console
          valC = val;
-         
+
          if (valC != false) {
             valF = Math.round((valC * 1.8) + 32, -2);
          } else {
@@ -62,17 +62,21 @@ setInterval(function () {
                "28-000005218965": {
                   "Time": time,
                   "Temp": valF,
-                  "Heating": state                  
+                  "Heating": state
                }
             });
+            logSensorData();
+            console.log("Logging: {28-000005218965: {Time: "+today+", Temp: "+temp+", Heating: "+state+"}}");
          } else {
             sensor_data_array.push({
                "28-00000521bec2": {
                   "Time": time,
                   "Temp": valF,
-                  "Heating": state                  
+                  "Heating": state
                }
             });
+            console.log("Logging: {28-00000521bec2: {Time: "+today+", Temp: "+temp+", Heating: "+state+"}}");
+            logSensorData();
          }
       });
    });
