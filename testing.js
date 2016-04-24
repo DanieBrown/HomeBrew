@@ -7,11 +7,11 @@ var bodyParser = require('body-parser'); // npm install --save body-parser
 app.use(bodyParser.json()); // to de-serialize?
 
 var state = 0;
-//
+
 function getRandomInt(min, max) {
    return Math.floor(Math.random() * (max - min)) + min;
 }
-//
+
 var sensor_data_array = [];
 for (var i = 0; i < 10; i++) {
    var temp = getRandomInt(30, 100);
@@ -24,7 +24,7 @@ for (var i = 0; i < 10; i++) {
          "Heating": state
       }
    });
-   console.log("Pushing {Water: {Time: " + today + ", Temp: " + temp + ", Heating: " + state + "}}");
+//   console.log("Pushing {Water: {Time: " + today + ", Temp: " + temp + ", Heating: " + state + "}}");
    sensor_data_array.push({
       "Room": {
          "Time": today,
@@ -32,7 +32,7 @@ for (var i = 0; i < 10; i++) {
          "Heating": state
       }
    });
-   console.log("Pushing {Room: {Time: " + today + ", Temp: " + temp + ", Heating: " + state + "}}");
+//   console.log("Pushing {Room: {Time: " + today + ", Temp: " + temp + ", Heating: " + state + "}}");
    logSensorData();
 }
 //console.log(sensor_data_array);
@@ -45,12 +45,13 @@ function logSensorData() {
 
 var sample_data = [];
 for (var i = 0; i < 10; i++) {
-   var time = getRandomInt(30, 100);
-   var temp = new Date();
+   var temp = getRandomInt(30, 100);
+   var time = new Date();
    sample_data.push({
       "Time": time,
       "Temp": temp
    });
+//   console.log("filled sample data array for current brew");
 }
 // Populate current_brew with sample data.
 // Change to real data later (get from next_schedule when it comes up!)
@@ -67,6 +68,7 @@ app.get('/getSensorData', function (req, res) {
 
 // Get JSON object of the current schedule (non changing)
 app.get('/getCurrentSchedule', function (req, res) {
+   console.log("getting current schedule from test server...");
    jsonfile.readFile('./current_brew.json', function (err, jsonfile) {
       res.json(jsonfile);
    });
