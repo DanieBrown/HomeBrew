@@ -15,9 +15,12 @@ app.use(bodyParser.json()); // to de-serialize?
 var ds18b20 = require('ds18b20'); // npm install --save ds18b20
 var b = require('bonescript');
 var led = "P8_13";
-var tempTarget = 73;
+var blueLed = "P8_12";
+var tempTarget = 75;
 b.pinMode(led, 'out');
+b.pinMode(blueLed, 'out');
 var state = 0;
+var blueState = 0;
 var inId = '28-00000521bec2';
 var outId = '28-000005218965';
 var sensorId = [];
@@ -34,25 +37,32 @@ var valF = 0;
 var sensor_data_array = [];
 
 b.digitalWrite(led, 0);
+b.digitalWrite(blueLed, 0);
 
 setInterval(function () {
    sensorId.forEach(function (id) {
       ds18b20.temperature(id, function (err, val) {
-         //send temperature reading out to console
-         valC = val;
+        //send temperature reading out to console
+        valC = val;
 
-         if (valC != false) {
-            valF = Math.round((valC * 1.8) + 32, -2);
-         } else {
-            valF = false;
-         }
-         if (id == inId && valF < tempTarget) {
-            state = 1;
-         } else if (id == inId && valF != false) {
-            state = 0;
-         }
+        if (valC != false) {
+          valF = Math.round((valC * 1.8) + 32, -2);
+        } else {
+           valF = false;
+        }
+        if (id == inId && valF < tempTarget) {
+          state = 1;
+        } else if (id == inId && valF != false) {
+          state = 0;
+        }
+        if (id == inId && valF > tempTarget) {
+          blueState = 1;
+        } else if (id == inId && valF != false) {
+          blueState = 0;
+        }
 
          b.digitalWrite(led, state);
+         b.digitalWrite(blueLed, blueState);
          console.log('id: ', id, ' value in C: ', valC, ' value in F: ', valF);
          var time = new Date();
          // log to json file
