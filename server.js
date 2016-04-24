@@ -56,7 +56,7 @@ setInterval(function () {
          
          // Add to json file of temp readings.
          var file = './sensor_data.json';
-         jsonfile.writeFile(file, sample_data, function (err) {
+         jsonfile.writeFile(file, sensor_data_array, function (err) {
             if (err)
                console.error(err);
          });
@@ -127,10 +127,16 @@ jsonfile.writeFile(file, sample_data, function (err) {
 });
 
 /* Server GET request */
+app.get('/getSensorData', function (req, res) {
+   jsonfile.readFile('./sensor_data.json', function (err, jsonfile) {
+       res.json(jsonfile);
+   });
+});
+
 app.get('/getCurrentSchedule', function (req, res) {
    jsonfile.readFile('./current_brew.json', function (err, jsonfile) {
-      // res.json(jsonfile);
-      res.json(sample_data);
+       res.json(jsonfile);
+//      res.json(sample_data);
    });
 });
 
