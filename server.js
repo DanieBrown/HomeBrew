@@ -45,8 +45,16 @@ setInterval(function () {
          //      }
          b.digitalWrite(led, state);
          console.log('id: ', id, ' value in C: ', valC, ' value in F: ', valF);
-
-         // add to json file of temp readings
+         
+         // Log to temporary json array.
+         var sensor_data_array = [];
+         sample_data_array.push({
+           "Time" : new Date(),
+           "Temp" : valF,
+           "Heating" : state
+	     });
+         
+         // Add to json file of temp readings.
          var file = './sensor_data.json';
          jsonfile.writeFile(file, sample_data, function (err) {
             if (err)
