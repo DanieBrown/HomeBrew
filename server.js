@@ -15,7 +15,7 @@ app.use(bodyParser.json()); // to de-serialize?
 var ds18b20 = require('ds18b20'); // npm install --save ds18b20
 var b = require('bonescript');
 var led = "P8_13";
-var tempTarget = 75;
+var tempTarget = 73;
 b.pinMode(led, 'out');
 var state = 0;
 var inId = '28-00000521bec2';
