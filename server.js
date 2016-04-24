@@ -1,3 +1,6 @@
+// how to reset you branch to the remote master when you screw everything up
+//git fetch origin
+//git reset --hard origin/master
 ///** Everything Below Here is for Reading Temperature Sensors */
 var express = require("express"); // npm install --save express
 var app = express();
