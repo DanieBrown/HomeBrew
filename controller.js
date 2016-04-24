@@ -4,15 +4,24 @@ var chart_view = angular.module('chart_view_module', ["highcharts-ng"]);
 chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
    var dataset = [];
 
-   var update = $http.get('/getCurrentSchedule').success(function (response) {
-      for (i = 0; i < response.length; i++) {
-         dataset.push([response[i].Time, response[i].Temp]);
-      }
-   });
+    $http.get('/getCurrentSchedule').success(function (response) {
+         for (i = 0; i < response.length; i++) {
+            dataset.push([response[i].Time, response[i].Temp]);
+         }
+      }); 
    
-   $scope.populate = function () {
-      $scope.highchartsNG.series[0].data = dataset;
-   }
+    $scope.populate = function () {
+     $http.get('/getCurrentSchedule').success(function (response) {
+         for (i = 0; i < response.length; i++) {
+            dataset.push([response[i].Time, response[i].Temp]);
+         }
+      }); 
+       $scope.highchartsNG.series[0].data = dataset;
+    }   
+    
+//   $scope.populate = function () {
+//      $scope.highchartsNG.series[0].data = dataset;
+//   }
 
    $scope.highchartsNG = {
       options: {
