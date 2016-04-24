@@ -159,3 +159,25 @@ app.listen(port, function () {
    console.log("Listening on " + port);
    // console.log("full path is: " + (__dirname + '/img/favicon.ico'));
 });
+
+process.stdin.resume();//so the program will not close instantly
+
+
+/* Turn off the Heater GPIO when the app closes! */
+function exitHandler(options, err) {
+    if (options.cleanup) console.log('clean');
+    if (err) console.log(err.stack);
+    if (options.exit) process.exit();
+    if (state == 1) {
+        b.digitalWrite(led, 0);
+    }
+}
+
+//do something when app is closing
+process.on('exit', exitHandler.bind(null,{cleanup:true}));
+
+//catches ctrl+c event
+process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+
+//catches uncaught exceptions
+process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
