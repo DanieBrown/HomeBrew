@@ -59,25 +59,23 @@ setInterval(function () {
          if (id === "28-000005218965") {
             // Log to temporary json array.
             sensor_data_array.push({
-               "28-000005218965": {
+               "Room": {
                   "Time": time,
                   "Temp": valF,
                   "Heating": state
                }
             });
-            logSensorData();
-            console.log("Logging: {28-000005218965: {Time: "+time+", Temp: "+valF+", Heating: "+state+"}}");
          } else {
             sensor_data_array.push({
-               "28-00000521bec2": {
+               "Water": {
                   "Time": time,
                   "Temp": valF,
                   "Heating": state
                }
             });
-            console.log("Logging: {28-00000521bec2: {Time: "+time+", Temp: "+valF+", Heating: "+state+"}}");
-            logSensorData();
          }
+         // After pushing to the sensor_data_array, re-write to the json file.
+         logSensorData();
       });
    });
 }, interval);
@@ -115,8 +113,7 @@ for (var i = 0; i < 10; i++) {
 // write the file
 var file = './current_brew.json';
 jsonfile.writeFile(file, sample_data, function (err) {
-   if (err)
-      console.error(err);
+   if (err) console.error(err);
 });
 
 // Get JSON object of sensor data

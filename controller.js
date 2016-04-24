@@ -2,7 +2,6 @@
 var chart_view = angular.module('chart_view_module', ["highcharts-ng"]);
 
 chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
-//   window.setTimeout(function, milliseconds);
    var dataset = [];
 
    var update = $http.get('/getCurrentSchedule').success(function (response) {
@@ -44,11 +43,9 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
 
 var newbrew = angular.module('new_brew_app', ["highcharts-ng"]);
 newbrew.controller('create_ctrl', function ($scope, $timeout, $http) {
-//   var data = [{"Time":1, "Temp":1},{"Time":2, "Temp":2}];
    $scope.chartData = [];
    var jsonData = [];
    
-
    $scope.addPoint = function (point) {
       var data = $scope.highchartsNG.series[0].data
       $scope.highchartsNG.series[0].data = data.concat([[point.time, point.temp]]);
