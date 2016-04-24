@@ -24,7 +24,7 @@ for (var i = 0; i < 10; i++) {
          "Heating": state
       }
    });
-//   console.log("Pushing {Water: {Time: " + today + ", Temp: " + temp + ", Heating: " + state + "}}");
+   //   console.log("Pushing {Water: {Time: " + today + ", Temp: " + temp + ", Heating: " + state + "}}");
    sensor_data_array.push({
       "Room": {
          "Time": today,
@@ -32,7 +32,7 @@ for (var i = 0; i < 10; i++) {
          "Heating": state
       }
    });
-//   console.log("Pushing {Room: {Time: " + today + ", Temp: " + temp + ", Heating: " + state + "}}");
+   //   console.log("Pushing {Room: {Time: " + today + ", Temp: " + temp + ", Heating: " + state + "}}");
    logSensorData();
 }
 //console.log(sensor_data_array);
@@ -51,8 +51,23 @@ for (var i = 0; i < 10; i++) {
       "Time": time,
       "Temp": temp
    });
-//   console.log("filled sample data array for current brew");
+   //   console.log("filled sample data array for current brew");
 }
+
+// add another point every 3 seconds
+setInterval(function () {
+   var temp = getRandomInt(30, 100);
+   var time = new Date();
+   sample_data.push({
+      "Time": time,
+      "Temp": temp
+   });
+   jsonfile.writeFile('./current_brew.json', sample_data, function (err) {
+      if (err) console.error(err);
+   });
+   console.log("added new sample point.");
+}, 3000);
+
 // Populate current_brew with sample data.
 // Change to real data later (get from next_schedule when it comes up!)
 jsonfile.writeFile('./current_brew.json', sample_data, function (err) {
