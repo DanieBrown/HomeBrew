@@ -136,7 +136,6 @@ app.get('/getSensorData', function (req, res) {
 app.get('/getCurrentSchedule', function (req, res) {
    jsonfile.readFile('./current_brew.json', function (err, jsonfile) {
        res.json(jsonfile);
-//      res.json(sample_data);
    });
 });
 
