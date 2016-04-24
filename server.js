@@ -48,7 +48,7 @@ setInterval(function () {
          
          // Log to temporary json array.
          var sensor_data_array = [];
-         sample_data_array.push({
+         sensor_data_array.push({
            "Time" : new Date(),
            "Temp" : valF,
            "Heating" : state
