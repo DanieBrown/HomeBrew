@@ -66,7 +66,7 @@ setInterval(function () {
                }
             });
             logSensorData();
-            console.log("Logging: {28-000005218965: {Time: "+today+", Temp: "+temp+", Heating: "+state+"}}");
+            console.log("Logging: {28-000005218965: {Time: "+time+", Temp: "+valF+", Heating: "+state+"}}");
          } else {
             sensor_data_array.push({
                "28-00000521bec2": {
@@ -75,7 +75,7 @@ setInterval(function () {
                   "Heating": state
                }
             });
-            console.log("Logging: {28-00000521bec2: {Time: "+today+", Temp: "+temp+", Heating: "+state+"}}");
+            console.log("Logging: {28-00000521bec2: {Time: "+time+", Temp: "+valF+", Heating: "+state+"}}");
             logSensorData();
          }
       });
