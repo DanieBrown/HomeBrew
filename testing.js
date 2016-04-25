@@ -12,9 +12,15 @@ var state = 0;
 // add minutes: var newDateObj = new Date(oldDateObj.getTime() + diff*60000);
 var sample_data = [];
 var last_time = new Date();
+
+sample_data.push({
+      "Time": last_time,
+      "Temp": 70
+   });
+
 for (var i = 0; i < 10; i++) {
    var temp = getRandomInt(30, 100);
-   var time = new Date(last_time.getTime() + getRandomInt(3, 8) * 60000);
+   var time = new Date(last_time.getTime() + getRandomInt(1, 3) * 60000);
    //   console.log("     time: "+time);
    var last_time = time;
    //   console.log("last_time: "+last_time);
@@ -87,7 +93,7 @@ setInterval(function () {
    var today = new Date();
    sensor_data_array.push({
       "Sensor": 'room',
-      "Time": time,
+      "Time": today,
       "Temp": out_temp,
       "Heating": tmp_heat_state,
       "Cooling": tmp_cool_state
