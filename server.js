@@ -12,7 +12,6 @@ var ds18b20 = require('ds18b20'); // npm install --save ds18b20
 var b = require('bonescript');
 var led = "P8_13";
 var blueLed = "P8_12";
-var tempTarget = 75;
 b.pinMode(led, 'out');
 b.pinMode(blueLed, 'out');
 
@@ -89,26 +88,42 @@ var sensor_data_array = [];
 b.digitalWrite(led, 0);
 b.digitalWrite(blueLed, 0);
 
+// ONLY USE TEMP_TARGET FOR TESTING
+var tempTarget = 75;
+// DELETE TEMP_TARGET WHEN DONE TESTING
 setInterval(function () {
    sensorId.forEach(function (id) {
       ds18b20.temperature(id, function (err, val) {
-         //send temperature reading out to console
          valC = val;
 
+         // Get Farenheit
          if (valC != false) {
             valF = Math.round((valC * 1.8) + 32, -2);
          } else {
             valF = false;
          }
+         
+         // If water temp < target temp, heat
          if (id == inId && valF < tempTarget) {
+//         if (id == inId && valF < cur_temp) {
             redState = 1;
          } else if (id == inId && valF != false) {
             redState = 0;
          }
+         
+         // If water temp > target temp, cool
          if (id == inId && valF > tempTarget) {
+//         if (id == inId && valF > cur_temp) {
             blueState = 1;
          } else if (id == inId && valF != false) {
             blueState = 0;
+         }
+         
+         // Change target time and temperature if it's time.
+         var now = new Date();
+         if(next_time < now) {
+            getNext();
+            console.log("Moving to next temp target: "+cur_temp);
          }
 
          b.digitalWrite(led, redState);
