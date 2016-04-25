@@ -78,7 +78,7 @@ jsonfile.readFile('./current_brew.json', function (err, data) {
    console.log("next_time: " + next_time);
    console.log("next_temp: " + next_temp);
    
-   cur_end_pos = cur_brew_json.length-1;
+   cur_end_pos = cur_brew_json.length - 1;
 });
 
 // Assign values of next time and temp cur, then get next.
@@ -86,13 +86,13 @@ function getNext() {
    // Terminate loop if you've reached end of schedule.
    if (pos === cur_end_pos ) {
       clearInterval(brewer);
+   } else {
+      pos = pos + 1;
+      cur_time = cur_brew_json[pos].Time;
+      cur_temp = cur_brew_json[pos].Temp;
+      next_time = cur_brew_json[pos + 1].Time;
+      next_temp = cur_brew_json[pos + 1].Temp;      
    }
-   
-   pos = pos + 1;
-   cur_time = cur_brew_json[pos].Time;
-   cur_temp = cur_brew_json[pos].Temp;
-   next_time = cur_brew_json[pos + 1].Time;
-   next_temp = cur_brew_json[pos + 1].Temp;
 }
 // set sensor IDs?
 ds18b20.sensors(function (err, id) {
