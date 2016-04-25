@@ -80,9 +80,15 @@ newbrew.controller('create_ctrl', function ($scope, $timeout, $http) {
 
    $scope.addPoint = function (point) {
       var data = $scope.highchartsNG.series[0].data
-      $scope.highchartsNG.series[0].data = data.concat([[point.time, point.temp]]);
+      var now = new Date(point.time);
+      var time = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+//      alert(point.time);
+//      alert(now)
+//      alert(time);
+      
+      $scope.highchartsNG.series[0].data = data.concat([[time, point.temp]]);
       var newJsonPoint = [{
-         "Time": point.time,
+         "Time": time,
          "Temp": point.temp
       }];
       jsonData = jsonData.concat(newJsonPoint);
@@ -99,14 +105,19 @@ newbrew.controller('create_ctrl', function ($scope, $timeout, $http) {
          },
          xAxis: {
             type: 'datetime',
-            dateTimeLabelFormats: {
-               minute: '%H:%M',
-               day: '%e. %b',
-               year: '%b'
+            labels: {
+               format: '{value:%H:%M:%S}',
+               rotation: 45,
+               align: 'left'
             },
             title: {
                text: 'Time & Date'
             }
+         },
+         tooltip: {
+            headerFormat: '<b>{series.name}</b><br>',
+            pointFormat: '{point.x:%H:%M:%S"}: {point.y} °F'
+         // pointFormat: '{point.x:%A, %b %e, %H:%M"}: {point.y:.2f} °F'
          }
       },
       series: [{

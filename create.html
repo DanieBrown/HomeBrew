@@ -12,8 +12,7 @@
    <title>Create a Schedule</title>
    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
    <!-- Custom styles for this template -->
-<!--   <link rel="stylesheet" type="text/css" href="style.css" />-->
-   <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Abel|Exo|Raleway'>
+   <!--   <link rel="stylesheet" type="text/css" href="style.css" />-->
 </head>
 
 <body>
@@ -42,7 +41,7 @@
             <!-- New Temperature Input -->
             <label for="brew-name" class="control-label">Schedule Name:</label>
             <div class="control">
-               <input id="brew-name" class="form-control"  data-ng-model="highchartsNG.title.text">
+               <input id="brew-name" class="form-control" data-ng-model="highchartsNG.title.text">
             </div>
          </div>
          <div class="form-group">
@@ -55,24 +54,24 @@
 
          <div class="form-group">
             <!-- New Datetime Input -->
-            <label for="new-time" class="control-label">Date & Time:</label>
+            <label for="new-time" class="control-label">Date and Time:</label>
             <div class="control">
                <input id="new-time" class="form-control" type="datetime-local" data-ng-model="point.time">
             </div>
          </div>
 
          <p><a class="btn btn-lg btn-primary" data-ng-click="addPoint(point)">Add Point</a>
-         <a class="btn btn-lg btn-primary pull-right" data-ng-click="schedule()">Schedule This Brew</a>
+            <a class="btn btn-lg btn-primary pull-right" data-ng-click="schedule()">Schedule This Brew</a>
          </p>
       </div>
    </div>
 
-   <script src="controller.js"></script>
    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+   <script src="controller.js"></script>
+   <script type="text/javascript" src="https://rawgit.com/pablojim/highcharts-ng/master/dist/highcharts-ng.js"></script>
+   <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-   <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
-   <script type="text/javascript" src="https://rawgit.com/pablojim/highcharts-ng/master/dist/highcharts-ng.js"></script>
 </body>
 
 </html>
