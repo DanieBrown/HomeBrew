@@ -79,14 +79,14 @@ function getRandomInt(min, max) {
 
 // Assume first temp in cur schedule is not before the cur time.
 var pos = 0;
-var cur_brew_json = [];
-var next_brew_json = [];
-var cur_time, cur_temp, next_time, next_temp, cur_end_pos;
+var cur_brew_json, next_brew_json, cur_time, cur_temp, next_time, next_temp, cur_end_pos;
 
 // Read in the the current brew schedule to a json object.
 function startCurrentBrew() {
    jsonfile.readFile('./current_brew.json', function (err, data) {
-      cur_brew_json.length = 0;
+      if (cur_brew_json !== undefined)
+         cur_brew_json.length = 0;
+      
       if (err) console.log("error reading current brew: " + err);
       JSON.stringify(data);
       cur_brew_json = data;
