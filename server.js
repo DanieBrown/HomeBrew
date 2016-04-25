@@ -94,7 +94,7 @@ function startCurrentBrew() {
       if (err) console.log("error reading current brew: " + err);
       JSON.stringify(data);
       cur_brew_json = data;
-      console.log("read json from cur: "+cur_brew_json);
+      console.log("read json from cur: "+data);
 
       cur_time = cur_brew_json[pos].Time;
       cur_temp = cur_brew_json[pos].Temp;
