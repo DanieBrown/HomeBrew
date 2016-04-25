@@ -51,15 +51,6 @@ function generateSampleData(points) {
    console.log("Generated sample data.");
 }
 
-// Clear array to populate next file
-sample_data.length = 0;
-
-
-// Populate current_brew with sample data.
-jsonfile.writeFile('./next_brew.json', sample_data, function (err) {
-   if (err) console.error("error writing to next brew: " + err);
-});
-
 function getRandomInt(min, max) {
    return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -77,6 +68,15 @@ function startCurrentBrew() {
    // Populate current_brew with sample data.
    jsonfile.writeFile('./current_brew.json', sample_data, function (err) {
       if (err) console.error("error writing to current brew: " + err);
+   });
+   
+   // Clear array to populate next file
+   sample_data.length = 0;
+
+   generateSampleData(5);
+   // Populate current_brew with sample data.
+   jsonfile.writeFile('./next_brew.json', sample_data, function (err) {
+      if (err) console.error("error writing to next brew: " + err);
    });
 
    jsonfile.readFile('./current_brew.json', function (err, data) {
@@ -125,10 +125,12 @@ function getNext() {
    // Terminate loop if you've reached end of schedule.
    if (pos === cur_end_pos) {
       if (isnextbrew) {
+         // if there is nothing in current or next brew, stop reading.
          clearInterval(brewer);
          console.log("No more brews, shutting down sensors. Ctrl+C to exit.");
       } else {
          console.log("Loading your next brew configuration...");
+         startNextBrew();
       }
    } else {
       pos = pos + 1;
