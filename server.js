@@ -48,6 +48,10 @@ for (var i = 0; i < 10; i++) {
    console.log("filled sample data array for current brew");
 }
 
+function getRandomInt(min, max) {
+   return Math.floor(Math.random() * (max - min)) + min;
+}
+
 // Populate current_brew with sample data.
 // Change to real data later (get from next_schedule when it comes up!)
 jsonfile.writeFile('./current_brew.json', sample_data, function (err) {
