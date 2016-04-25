@@ -1,14 +1,14 @@
 // Server imports
-var express = require("express");         // npm install --save express
+var express = require("express"); // npm install --save express
 var app = express();
 var fs = require("fs");
 var util = require('util');
-var jsonfile = require('jsonfile');       // npm install --save jsonfile
-var bodyParser = require('body-parser');  // npm install --save body-parser
-app.use(bodyParser.json());               // to de-serialize?
+var jsonfile = require('jsonfile'); // npm install --save jsonfile
+var bodyParser = require('body-parser'); // npm install --save body-parser
+app.use(bodyParser.json()); // to de-serialize?
 
 // Sensor imports
-var ds18b20 = require('ds18b20');         // npm install --save ds18b20
+var ds18b20 = require('ds18b20'); // npm install --save ds18b20
 var b = require('bonescript');
 var led = "P8_13";
 var blueLed = "P8_12";
@@ -175,7 +175,7 @@ var brewer = setInterval(function () {
       ds18b20.temperature(id, function (err, val) {
          valC = val;
 
-         // console.log('id: ', id, ' value in C: ', valC, ' value in F: ', valF);
+         console.log('id: ', id, ' value in C: ', valC, ' value in F: ', valF);
          var time = new Date();
          // log to json file
          if (valF != false) {
@@ -296,6 +296,29 @@ function exitHandler(options, err) {
 
    b.digitalWrite(led, 0);
    b.digitalWrite(blueLed, 0);
+
+//   // Clear the next_brew file.
+//   jsonfile.writeFile('./next_brew.json', empty_array, function (err) {
+//      isnextbrew = false;
+//      if (err) console.error(err);
+//      else console.log("Clearing next_brew.json file...");
+//   });
+//   
+//   // Clear the current_brew file.
+//   jsonfile.writeFile('./current_brew.json', empty_array, function (err) {
+//      isnextbrew = false;
+//      if (err) console.error(err);
+//      else console.log("Clearing current_brew.json file...");
+//   });
+//   
+//   // Clear the sensor_data file.
+//   jsonfile.writeFile('./sensor_data.json', empty_array, function (err) {
+//      isnextbrew = false;
+//      if (err) console.error(err);
+//      else console.log("Clearing sensor_data.json file...");
+//   });
+
+
 }
 
 //do something when app is closing
@@ -312,11 +335,3 @@ process.on('SIGINT', exitHandler.bind(null, {
 process.on('uncaughtException', exitHandler.bind(null, {
    exit: true
 }));
-
-var sensor_data_array = [];
-
-function logSensorData() {
-   jsonfile.writeFile('./sensor_data.json', sensor_data_array, function (err) {
-      if (err) console.error(err);
-   });
-}
