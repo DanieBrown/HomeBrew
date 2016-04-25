@@ -27,9 +27,8 @@ var empty_array = [];
 // Generate sample data for currently scheduled brew
 // add minutes: var newDateObj = new Date(oldDateObj.getTime() + diff*60000);
 
-var sample_data = [];
-
 function generateSampleData(points) {
+   var sample_data = [];
    var last_time = new Date();
 
    sample_data.push({
@@ -49,6 +48,7 @@ function generateSampleData(points) {
       });
    console.log("Generated sample data: " + sample_data +"\n");
    }
+   return sample_data;
 }
 
 function getRandomInt(min, max) {
@@ -61,23 +61,31 @@ var cur_brew_json = [];
 var next_brew_json = [];
 var cur_time, cur_temp, next_time, next_temp, cur_end_pos;
 
+function isNextBrew() {
+   var flag = false;
+   jsonfile.readFile('./current_brew.json', function (err, data) {
+      if (err) console.log("error reading current brew: " + err);
+      JSON.stringify(data);
+      if (!jQuery.isEmptyObject(data)) flag = true;
+   });
+   return flag;
+}
+
 // Read in the the current brew schedule to a json object.
 function startCurrentBrew() {
-   generateSampleData(7);
+   var cur_generated_data = generateSampleData(7);
 
    // Populate current_brew with sample data.
-   jsonfile.writeFile('./current_brew.json', sample_data, function (err) {
+   jsonfile.writeFile('./current_brew.json', cur_generated_data, function (err) {
       if (err) console.error("error writing to current brew: " + err);
    });
    
-//   // Clear array to populate next file
-//   sample_data.length = 0;
-//
-//   generateSampleData(5);
-//   // Populate current_brew with sample data.
-//   jsonfile.writeFile('./next_brew.json', sample_data, function (err) {
-//      if (err) console.error("error writing to next brew: " + err);
-//   });
+   var next_generated_data = generateSampleData(5);
+   
+   // Populate current_brew with sample data.
+   jsonfile.writeFile('./next_brew.json', next_generated_data, function (err) {
+      if (err) console.error("error writing to next brew: " + err);
+   });
 
    jsonfile.readFile('./current_brew.json', function (err, data) {
       if (err) console.log("error reading current brew: " + err);
@@ -119,13 +127,13 @@ function startNextBrew() {
 function getNext() {
    // Terminate loop if you've reached end of schedule.
    if (pos === cur_end_pos) {
-      if (isnextbrew) {
+      if (isNextBrew()) {
+         console.log("Loading your next brew configuration...");
+         startNextBrew();
+      } else {
          // if there is nothing in current or next brew, stop reading.
          clearInterval(brewer);
          console.log("No more brews, shutting down sensors. Ctrl+C to exit.");
-      } else {
-         console.log("Loading your next brew configuration...");
-         startNextBrew();
       }
    } else {
       pos = pos + 1;
