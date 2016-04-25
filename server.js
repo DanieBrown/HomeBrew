@@ -80,7 +80,8 @@ jsonfile.readFile('./current_brew.json', function (err, data) {
 
 // Assign values of next time and temp cur, then get next.
 function getNext() {
-   pos++;
+   console.log("getting next..");
+   pos = pos + 1;
    cur_time = cur_brew_json[pos].Time;
    cur_temp = cur_brew_json[pos].Temp;
    next_time = cur_brew_json[pos + 1].Time;
