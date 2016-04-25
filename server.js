@@ -21,22 +21,22 @@ var blueState = 0;
 var inId = '28-00000521bec2';
 var outId = '28-000005218965';
 var sensorId = [];
-var pos = 0;   // for keeping track of current point in schedule
+var pos = 0; // for keeping track of current point in schedule
 var cur_brew_json;
 var cur_brew_array = [];
 
-// Create sample data for currently scheduled brew
+// Generate sample data for currently scheduled brew
 // add minutes: var newDateObj = new Date(oldDateObj.getTime() + diff*60000);
 var sample_data = [];
 var last_time = new Date();
 
 sample_data.push({
-      "Time": last_time,
-      "Temp": 70
-   });
+   "Time": last_time,
+   "Temp": 70
+});
 
 for (var i = 0; i < 10; i++) {
-   var temp = getRandomInt(30, 100);
+   var temp = getRandomInt(73, 81);
    var time = new Date(last_time.getTime() + getRandomInt(1, 3) * 2000);
    //   console.log("     time: "+time);
    var last_time = time;
@@ -97,19 +97,26 @@ var sensor_data_array = [];
 
 // Clear sensor data file.
 jsonfile.writeFile('./sensor_data.json', sensor_data_array, function (err) {
-      if (err) console.error(err);
+   if (err) console.error(err);
 });
 
 b.digitalWrite(led, 0);
 b.digitalWrite(blueLed, 0);
 
 // ONLY USE TEMP_TARGET FOR TESTING
-var tempTarget = 75;
+//var tempTarget = 75;
 // DELETE TEMP_TARGET WHEN DONE TESTING
 setInterval(function () {
    sensorId.forEach(function (id) {
       ds18b20.temperature(id, function (err, val) {
          valC = val;
+
+         // Change target time and temperature if it's time.
+         var now = new Date();
+         if (next_time < now) {
+            getNext();
+            console.log("Moving to next temp target: " + cur_temp);
+         }
 
          // Get Farenheit
          if (valC != false) {
@@ -117,28 +124,19 @@ setInterval(function () {
          } else {
             valF = false;
          }
-         
+
          // If water temp < target temp, heat
-         if (id == inId && valF < tempTarget) {
-//         if (id == inId && valF < cur_temp) {
+         if (id == inId && valF < cur_temp) {
             redState = 1;
          } else if (id == inId && valF != false) {
             redState = 0;
          }
-         
+
          // If water temp > target temp, cool
-         if (id == inId && valF > tempTarget) {
-//         if (id == inId && valF > cur_temp) {
+         if (id == inId && valF > cur_temp) {
             blueState = 1;
          } else if (id == inId && valF != false) {
             blueState = 0;
-         }
-         
-         // Change target time and temperature if it's time.
-         var now = new Date();
-         if(next_time < now) {
-            getNext();
-            console.log("Moving to next temp target: "+cur_temp);
          }
 
          b.digitalWrite(led, redState);
@@ -146,25 +144,25 @@ setInterval(function () {
          console.log('id: ', id, ' value in C: ', valC, ' value in F: ', valF);
          var time = new Date();
          // log to json file
-	if(valF != false){
-         if (id === "28-000005218965") {
-            sensor_data_array.push({
-               "Sensor": 'room',
-               "Time": time,
-               "Temp": valF,
-               "Heating": redState,
-               "Cooling": blueState
-            });
-         } else {
-            sensor_data_array.push({
-               "Sensor": 'water',
-               "Time": time,
-               "Temp": valF,
-               "Heating": redState,
-               "Cooling": blueState
-            });
+         if (valF != false) {
+            if (id === "28-000005218965") {
+               sensor_data_array.push({
+                  "Sensor": 'room',
+                  "Time": time,
+                  "Temp": valF,
+                  "Heating": redState,
+                  "Cooling": blueState
+               });
+            } else {
+               sensor_data_array.push({
+                  "Sensor": 'water',
+                  "Time": time,
+                  "Temp": valF,
+                  "Heating": redState,
+                  "Cooling": blueState
+               });
+            }
          }
-	}
          // After pushing to the sensor_data_array, re-write to the json file.
          logSensorData();
       });
