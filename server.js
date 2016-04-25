@@ -37,7 +37,7 @@ sample_data.push({
 
 for (var i = 0; i < 10; i++) {
    var temp = getRandomInt(73, 81);
-   var time = new Date(last_time.getTime() + getRandomInt(1, 3) * 60000);
+   var time = new Date(last_time.getTime() + getRandomInt(1, 3) * 10000);
    //   console.log("     time: "+time);
    var last_time = time;
    //   console.log("last_time: "+last_time);
