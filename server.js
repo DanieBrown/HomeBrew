@@ -95,6 +95,11 @@ var valC = 0;
 var valF = 0;
 var sensor_data_array = [];
 
+// Clear sensor data file.
+jsonfile.writeFile('./sensor_data.json', sensor_data_array, function (err) {
+      if (err) console.error(err);
+});
+
 b.digitalWrite(led, 0);
 b.digitalWrite(blueLed, 0);
 
