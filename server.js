@@ -170,7 +170,7 @@ var brewer = setInterval(function () {
 
          // Change target time and temperature if it's time.
          var now = new Date().toISOString();
-         console.log("Checking is next_time [" + next_time + "] <= now [" + now + "]?");
+//         console.log("Checking is next_time [" + next_time + "] <= now [" + now + "]?");
          if (next_time <= now) {
             getNext();
             console.log("Moving to next temp target: " + cur_temp);
@@ -233,12 +233,6 @@ function logSensorData() {
          console.error(err);
    });
 }
-
-// write the file
-var file = './current_brew.json';
-jsonfile.writeFile(file, sample_data, function (err) {
-   if (err) console.error(err);
-});
 
 // Get JSON object of sensor data
 app.get('/getSensorData', function (req, res) {

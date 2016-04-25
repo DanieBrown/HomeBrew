@@ -14,7 +14,6 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
          var time = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
          current_brew.push([time, response[i].Temp]);
       }
-      alert(current_brew);
    });
 
    // populate graph with currently scheduled brew.
@@ -95,9 +94,6 @@ newbrew.controller('create_ctrl', function ($scope, $timeout, $http) {
       var data = $scope.highchartsNG.series[0].data
       var now = new Date(point.time);
       var time = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-      //      alert(point.time);
-      //      alert(now)
-      //      alert(time);
 
       $scope.highchartsNG.series[0].data = data.concat([[time, point.temp]]);
       var newJsonPoint = [{
