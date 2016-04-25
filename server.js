@@ -84,7 +84,7 @@ var cur_brew_json, next_brew_json, cur_time, cur_temp, next_time, next_temp, cur
 // Read in the the current brew schedule to a json object.
 function startCurrentBrew() {
    jsonfile.readFile('./current_brew.json', function (err, data) {
-      if (cur_brew_json !== undefined || cur_brew_json !== []) {
+      if (cur_brew_json !== undefined && cur_brew_json !== []) {
          cur_brew_json.length = 0;
          console.log("empty cur brew.");
       }
