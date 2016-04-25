@@ -113,7 +113,8 @@ setInterval(function () {
 
          // Change target time and temperature if it's time.
          var now = new Date();
-         if (next_time >= now) {
+         console.log("Checking is next_time ["+next_time+"] <= now ["+now+"]?");
+         if (next_time <= now) {
             getNext();
             console.log("Moving to next temp target: " + cur_temp);
          }
