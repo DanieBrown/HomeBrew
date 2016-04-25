@@ -61,12 +61,13 @@ var cur_brew_json = [];
 var next_brew_json = [];
 var cur_time, cur_temp, next_time, next_temp, cur_end_pos;
 
+// Return true if the next_brew file contains a config.
 function isNextBrew() {
    var flag = false;
-   jsonfile.readFile('./current_brew.json', function (err, data) {
+   jsonfile.readFile('./next_brew.json', function (err, data) {
       if (err) console.log("error reading current brew: " + err);
       JSON.stringify(data);
-      if (!jQuery.isEmptyObject(data)) flag = true;
+      if (data.length !== 0) flag = true;
    });
    return flag;
 }
