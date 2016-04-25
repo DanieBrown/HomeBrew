@@ -113,7 +113,7 @@ setInterval(function () {
          valC = val;
 
          // Change target time and temperature if it's time.
-         var now = new Date();
+         var now = new Date().toISOString();
          console.log("Checking is next_time ["+next_time+"] <= now ["+now+"]?");
          if (next_time <= now) {
             getNext();
