@@ -75,14 +75,14 @@ function isNextBrew() {
 
 // Read in the the current brew schedule to a json object.
 function startCurrentBrew() {
-   var cur_generated_data = generateSampleData(5);
+   var cur_generated_data = generateSampleData(2);
 
    // Populate current_brew with sample data.
    jsonfile.writeFile('./current_brew.json', cur_generated_data, function (err) {
       if (err) console.error("error writing to current brew: " + err);
    });
    
-   var next_generated_data = generateSampleData(2);
+   var next_generated_data = generateSampleData(1);
    
    // Populate current_brew with sample data.
    jsonfile.writeFile('./next_brew.json', next_generated_data, function (err) {
