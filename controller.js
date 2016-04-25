@@ -3,7 +3,8 @@ var chart_view = angular.module('chart_view_module', ["highcharts-ng"]);
 
 chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
    var current_brew = [];
-   var live_readings = [];
+   var water_readings = [];
+   var room_readings = [];
    //   $scope.current_water_temp;
 
    // populate graph with currently scheduled brew.
@@ -21,17 +22,21 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
       for (i = 0; i < response.length; i++) {
          var now = new Date(response[i].Time);
          var time = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-         live_readings.push([time, response[i].Temp]);
+         
+         if (response[i].Sensor === 'water')
+            water_readings.push([time, response[i].Temp]);
+         else
+            room_readings.push([time, response[i].Temp]);
       }
    });
 
    setInterval(function () {
       $http.get('/getSensorData').success(function (response) {
-         if (live_readings.length !== response.length) {
-            for (i = live_readings.length - 1; i < response.length; i++) {
+         if (water_readings.length !== response.length) {
+            for (i = water_readings.length - 1; i < response.length; i++) {
                var now = new Date(response[i].Time);
                var time = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-               live_readings.push([time, response[i].Temp]);
+               water_readings.push([time, response[i].Temp]);
             }
          }
       });
@@ -64,7 +69,10 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
          data: current_brew
     }, {
          name: 'Water Temperature',
-         data: live_readings
+         data: water_readings
+    }, {
+         name: 'Room Temperature',
+         data: room_readings
     }],
       title: {
          text: 'All the data you will ever need...'
