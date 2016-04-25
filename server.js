@@ -1,17 +1,13 @@
-// how to reset you branch to the remote master when you screw everything up
-//git fetch origin
-//git reset --hard origin/master
-///** Everything Below Here is for Reading Temperature Sensors */
+// Server imports
 var express = require("express"); // npm install --save express
 var app = express();
 var fs = require("fs");
 var util = require('util');
 var jsonfile = require('jsonfile'); // npm install --save jsonfile
 var bodyParser = require('body-parser'); // npm install --save body-parser
-// var favicon = require('serve-favicon');
 app.use(bodyParser.json()); // to de-serialize?
-// app.use(favicon(__dirname + '/img/fav-beer.ico'));
 
+// Sensor imports
 var ds18b20 = require('ds18b20'); // npm install --save ds18b20
 var b = require('bonescript');
 var led = "P8_13";
@@ -19,55 +15,73 @@ var blueLed = "P8_12";
 var tempTarget = 75;
 b.pinMode(led, 'out');
 b.pinMode(blueLed, 'out');
-var state = 0;
+
+// Global variables for sensing
+var redState = 0;
 var blueState = 0;
 var inId = '28-00000521bec2';
 var outId = '28-000005218965';
 var sensorId = [];
+var pos = 0;   // for keeping track of current point in schedule
+var cur_brew_json;
+var cur_brew_array = [];
 
-var cur_idx = 0;
-
-//var next_time;
-//
-//var next_temp;
-//
-//var curr_time;
-//
-//var curr_temp;
-
-
-
-var curr_brew_array = jsonfile.readFile('./current_brew.json', function (err, jsonfile_data) {
- });
-var curr_pos = 0;
-
-
-//Get JSON object of the current schedule (non changing)
-function getNextTimeAndTemp() {
-	curr_time = next_time;	
-	curr_temp = next_temp;
-	next_time = curr_brew_array[curr_pos+2].Time;
-	
-	next_temp = curr_brew_array[curr_pos+2].Temp;
-	
-	curr_pos++;
-	
-	res.json(next_time,next_temp);
+// Create sample data for currently scheduled brew
+// add minutes: var newDateObj = new Date(oldDateObj.getTime() + diff*60000);
+var sample_data = [];
+var last_time = new Date();
+for (var i = 0; i < 10; i++) {
+   var temp = getRandomInt(30, 100);
+   var time = new Date(last_time.getTime() + getRandomInt(3, 8) * 60000);
+   //   console.log("     time: "+time);
+   var last_time = time;
+   //   console.log("last_time: "+last_time);
+   sample_data.push({
+      "Time": time,
+      "Temp": temp
+   });
+   console.log("filled sample data array for current brew");
 }
 
+// Populate current_brew with sample data.
+// Change to real data later (get from next_schedule when it comes up!)
+jsonfile.writeFile('./current_brew.json', sample_data, function (err) {
+   if (err) console.error("error writing to current brew: " + err);
+});
 
+// Assume first temp in cur schedule is not before the cur time.
+var pos = 0;
+var cur_brew_json, cur_time, cur_temp, next_time, next_temp, cur_brew_end, next_brew_start;
 
+// Read in the the current brew schedule to a json object.
+jsonfile.readFile('./current_brew.json', function (err, data) {
+   if (err) console.log("error reading current brew: " + err);
+   JSON.stringify(data);
+   cur_brew_json = data;
 
+   cur_time = cur_brew_json[pos].Time;
+   cur_temp = cur_brew_json[pos].Temp;
+   next_time = cur_brew_json[pos + 1].Time;
+   next_temp = cur_brew_json[pos + 1].Temp;
+   console.log("cur_time: " + cur_time);
+   console.log("cur_temp: " + cur_temp);
+   console.log("next_time: " + next_time);
+   console.log("next_temp: " + next_temp);
+});
 
-
-
+// Assign values of next time and temp cur, then get next.
+function getNext() {
+   pos++;
+   cur_time = cur_brew_json[pos].Time;
+   cur_temp = cur_brew_json[pos].Temp;
+   next_time = cur_brew_json[pos + 1].Time;
+   next_temp = cur_brew_json[pos + 1].Temp;
+}
 // set sensor IDs?
 ds18b20.sensors(function (err, id) {
    sensorId = id;
-   //console.log(id)
 });
 
-var interval = 5000;
 var valC = 0;
 var valF = 0;
 var sensor_data_array = [];
@@ -78,81 +92,57 @@ b.digitalWrite(blueLed, 0);
 setInterval(function () {
    sensorId.forEach(function (id) {
       ds18b20.temperature(id, function (err, val) {
-        //send temperature reading out to console
-        valC = val;
+         //send temperature reading out to console
+         valC = val;
 
-        if (valC != false) {
-          valF = Math.round((valC * 1.8) + 32, -2);
-        } else {
-           valF = false;
-        }
-        if (id == inId && valF < tempTarget) {
-          state = 1;
-        } else if (id == inId && valF != false) {
-          state = 0;
-        }
-        if (id == inId && valF > tempTarget) {
-          blueState = 1;
-        } else if (id == inId && valF != false) {
-          blueState = 0;
-        }
+         if (valC != false) {
+            valF = Math.round((valC * 1.8) + 32, -2);
+         } else {
+            valF = false;
+         }
+         if (id == inId && valF < tempTarget) {
+            redState = 1;
+         } else if (id == inId && valF != false) {
+            redState = 0;
+         }
+         if (id == inId && valF > tempTarget) {
+            blueState = 1;
+         } else if (id == inId && valF != false) {
+            blueState = 0;
+         }
 
-         b.digitalWrite(led, state);
+         b.digitalWrite(led, redState);
          b.digitalWrite(blueLed, blueState);
          console.log('id: ', id, ' value in C: ', valC, ' value in F: ', valF);
          var time = new Date();
          // log to json file
          if (id === "28-000005218965") {
-            // Log to temporary json array.
             sensor_data_array.push({
-               "Room": {
-                  "Time": time,
-                  "Temp": valF,
-                  "Heating": state
-               }
+               "Sensor": 'room',
+               "Time": time,
+               "Temp": valF,
+               "Heating": redState,
+               "Cooling": blueState
             });
          } else {
             sensor_data_array.push({
-               "Water": {
-                  "Time": time,
-                  "Temp": valF,
-                  "Heating": state
-               }
+               "Sensor": 'water',
+               "Time": time,
+               "Temp": valF,
+               "Heating": redState,
+               "Cooling": blueState
             });
          }
          // After pushing to the sensor_data_array, re-write to the json file.
          logSensorData();
       });
    });
-}, interval);
-
+}, 5000);
 
 function logSensorData() {
    jsonfile.writeFile('./sensor_data.json', sensor_data_array, function (err) {
       if (err)
          console.error(err);
-   });
-}
-
-b.digitalWrite(led, 0);
-
-
-/* Generate sample data to fill graph upon opening the page */
-// Functionality for time stamps and dummy temps in a json text file
-// Returns a random integer between min (included) and max (excluded)
-// Using Math.round() will give you a non-uniform distribution!
-
-function getRandomInt(min, max) {
-   return Math.floor(Math.random() * (max - min)) + min;
-}
-
-var sample_data = [];
-for (var i = 0; i < 10; i++) {
-   var number = getRandomInt(30, 100);
-   var today = new Date();
-   sample_data.push({
-      "Time": today,
-      "Temp": number
    });
 }
 
@@ -205,15 +195,14 @@ app.listen(port, function () {
 
 process.stdin.resume(); //so the program will not close instantly
 
-
 /* Turn off the Heater GPIO when the app closes! */
 function exitHandler(options, err) {
    if (options.cleanup) console.log('clean');
    if (err) console.log(err.stack);
    if (options.exit) process.exit();
-   if (state == 1) {
-      b.digitalWrite(led, 0);
-   }
+
+   b.digitalWrite(led, 0);
+   b.digitalWrite(blueLed, 0);
 }
 
 //do something when app is closing
