@@ -37,7 +37,7 @@ sample_data.push({
 
 for (var i = 0; i < 10; i++) {
    var temp = getRandomInt(73, 81);
-   var time = new Date(last_time.getTime() + getRandomInt(1, 3) * 2000);
+   var time = new Date(last_time.getTime() + getRandomInt(1, 3) * 60000);
    //   console.log("     time: "+time);
    var last_time = time;
    //   console.log("last_time: "+last_time);
@@ -113,7 +113,7 @@ setInterval(function () {
 
          // Change target time and temperature if it's time.
          var now = new Date();
-         if (next_time < now) {
+         if (next_time >= now) {
             getNext();
             console.log("Moving to next temp target: " + cur_temp);
          }
