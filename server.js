@@ -67,6 +67,7 @@ function isNextBrew() {
    jsonfile.readFile('./next_brew.json', function (err, data) {
       if (err) console.log("error reading current brew: " + err);
       JSON.stringify(data);
+      console.log("next_brew data: "+ data);
       if (data.length !== 0) flag = true;
    });
    return flag;
@@ -74,14 +75,14 @@ function isNextBrew() {
 
 // Read in the the current brew schedule to a json object.
 function startCurrentBrew() {
-   var cur_generated_data = generateSampleData(7);
+   var cur_generated_data = generateSampleData(5);
 
    // Populate current_brew with sample data.
    jsonfile.writeFile('./current_brew.json', cur_generated_data, function (err) {
       if (err) console.error("error writing to current brew: " + err);
    });
    
-   var next_generated_data = generateSampleData(5);
+   var next_generated_data = generateSampleData(2);
    
    // Populate current_brew with sample data.
    jsonfile.writeFile('./next_brew.json', next_generated_data, function (err) {
@@ -200,7 +201,7 @@ var brewer = setInterval(function () {
 
          b.digitalWrite(led, redState);
          b.digitalWrite(blueLed, blueState);
-         console.log('id: ', id, ' value in C: ', valC, ' value in F: ', valF);
+//         console.log('id: ', id, ' value in C: ', valC, ' value in F: ', valF);
          var time = new Date();
          // log to json file
          if (valF != false) {
