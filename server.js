@@ -1,4 +1,3 @@
-// Server imports
 var express = require("express"); // npm install --save express
 var app = express();
 var fs = require("fs");
@@ -7,23 +6,7 @@ var jsonfile = require('jsonfile'); // npm install --save jsonfile
 var bodyParser = require('body-parser'); // npm install --save body-parser
 app.use(bodyParser.json()); // to de-serialize?
 
-// Sensor imports
-var ds18b20 = require('ds18b20'); // npm install --save ds18b20
-var b = require('bonescript');
-var led = "P8_13";
-var blueLed = "P8_12";
-b.pinMode(led, 'out');
-b.pinMode(blueLed, 'out');
-
-// Global variables for sensing
-var redState = 0;
-var blueState = 0;
-var inId = '28-00000521bec2';
-var outId = '28-000005218965';
-var sensorId = [];
-var pos = 0;   // for keeping track of current point in schedule
-var cur_brew_json;
-var cur_brew_array = [];
+var state = 0;
 
 // Create sample data for currently scheduled brew
 // add minutes: var newDateObj = new Date(oldDateObj.getTime() + diff*60000);
@@ -31,9 +14,9 @@ var sample_data = [];
 var last_time = new Date();
 
 sample_data.push({
-      "Time": last_time,
-      "Temp": 70
-   });
+   "Time": last_time,
+   "Temp": 70
+});
 
 for (var i = 0; i < 10; i++) {
    var temp = getRandomInt(30, 100);
@@ -46,10 +29,6 @@ for (var i = 0; i < 10; i++) {
       "Temp": temp
    });
    console.log("filled sample data array for current brew");
-}
-
-function getRandomInt(min, max) {
-   return Math.floor(Math.random() * (max - min)) + min;
 }
 
 // Populate current_brew with sample data.
@@ -86,99 +65,55 @@ function getNext() {
    next_time = cur_brew_json[pos + 1].Time;
    next_temp = cur_brew_json[pos + 1].Temp;
 }
-// set sensor IDs?
-ds18b20.sensors(function (err, id) {
-   sensorId = id;
-});
 
-var valC = 0;
-var valF = 0;
+function getRandomInt(min, max) {
+   return Math.floor(Math.random() * (max - min)) + min;
+}
+
 var sensor_data_array = [];
-
-b.digitalWrite(led, 0);
-b.digitalWrite(blueLed, 0);
-
-// ONLY USE TEMP_TARGET FOR TESTING
-var tempTarget = 75;
-// DELETE TEMP_TARGET WHEN DONE TESTING
-setInterval(function () {
-   sensorId.forEach(function (id) {
-      ds18b20.temperature(id, function (err, val) {
-         valC = val;
-
-         // Get Farenheit
-         if (valC != false) {
-            valF = Math.round((valC * 1.8) + 32, -2);
-         } else {
-            valF = false;
-         }
-         
-         // If water temp < target temp, heat
-         if (id == inId && valF < tempTarget) {
-//         if (id == inId && valF < cur_temp) {
-            redState = 1;
-         } else if (id == inId && valF != false) {
-            redState = 0;
-         }
-         
-         // If water temp > target temp, cool
-         if (id == inId && valF > tempTarget) {
-//         if (id == inId && valF > cur_temp) {
-            blueState = 1;
-         } else if (id == inId && valF != false) {
-            blueState = 0;
-         }
-         
-         // Change target time and temperature if it's time.
-         var now = new Date();
-         if(next_time < now) {
-            getNext();
-            console.log("Moving to next temp target: "+cur_temp);
-         }
-
-         b.digitalWrite(led, redState);
-         b.digitalWrite(blueLed, blueState);
-         console.log('id: ', id, ' value in C: ', valC, ' value in F: ', valF);
-         var time = new Date();
-         // log to json file
-         if (id === "28-000005218965") {
-            sensor_data_array.push({
-               "Sensor": 'room',
-               "Time": time,
-               "Temp": valF,
-               "Heating": redState,
-               "Cooling": blueState
-            });
-         } else {
-            sensor_data_array.push({
-               "Sensor": 'water',
-               "Time": time,
-               "Temp": valF,
-               "Heating": redState,
-               "Cooling": blueState
-            });
-         }
-         // After pushing to the sensor_data_array, re-write to the json file.
-         logSensorData();
-      });
-   });
-}, 5000);
 
 function logSensorData() {
    jsonfile.writeFile('./sensor_data.json', sensor_data_array, function (err) {
-      if (err)
-         console.error(err);
+      if (err) console.error(err);
    });
 }
 
-// write the file
-var file = './current_brew.json';
-jsonfile.writeFile(file, sample_data, function (err) {
-   if (err) console.error(err);
-});
+// add another point every 3 seconds
+setInterval(function () {
+   var now = new Date();
+   if (next_time < now) {
+      getNext();
+      console.log("Moving to next temp target: " + cur_temp);
+   }
+
+   var in_temp = getRandomInt(30, 100);
+   var out_temp = getRandomInt(30, 100);
+   var tmp_heat_state = getRandomInt(0, 2);
+   var tmp_cool_state = 0;
+   if (tmp_heat_state === 0)
+      tmp_cool_state = getRandomInt(0, 2);
+   var today = new Date();
+   sensor_data_array.push({
+      "Sensor": 'room',
+      "Time": today,
+      "Temp": out_temp,
+      "Heating": tmp_heat_state,
+      "Cooling": tmp_cool_state
+   });
+   sensor_data_array.push({
+      "Sensor": 'water',
+      "Time": today,
+      "Temp": in_temp,
+      "Heating": tmp_heat_state,
+      "Cooling": tmp_cool_state
+   });
+   logSensorData();
+   console.log("logged 2 random temp senses.");
+}, 1000);
 
 // Get JSON object of sensor data
 app.get('/getSensorData', function (req, res) {
+   console.log("getting sensor data from test server...");
    jsonfile.readFile('./sensor_data.json', function (err, jsonfile) {
       res.json(jsonfile);
    });
@@ -186,6 +121,7 @@ app.get('/getSensorData', function (req, res) {
 
 // Get JSON object of the current schedule (non changing)
 app.get('/getCurrentSchedule', function (req, res) {
+   console.log("getting current schedule from test server...");
    jsonfile.readFile('./current_brew.json', function (err, jsonfile) {
       res.json(jsonfile);
    });
@@ -196,8 +132,7 @@ app.post('/postNewSchedule', function (req, res) {
    console.log("Called post method in controller.");
    console.log(req.body);
    jsonfile.writeFile('./next_brew.json', req.body, function (err) {
-      if (err)
-         console.error(err);
+      if (err) console.error(err);
    });
 });
 
@@ -217,30 +152,3 @@ app.listen(port, function () {
    console.log("Listening on " + port);
    // console.log("full path is: " + (__dirname + '/img/favicon.ico'));
 });
-
-process.stdin.resume(); //so the program will not close instantly
-
-/* Turn off the Heater GPIO when the app closes! */
-function exitHandler(options, err) {
-   if (options.cleanup) console.log('clean');
-   if (err) console.log(err.stack);
-   if (options.exit) process.exit();
-
-   b.digitalWrite(led, 0);
-   b.digitalWrite(blueLed, 0);
-}
-
-//do something when app is closing
-process.on('exit', exitHandler.bind(null, {
-   cleanup: true
-}));
-
-//catches ctrl+c event
-process.on('SIGINT', exitHandler.bind(null, {
-   exit: true
-}));
-
-//catches uncaught exceptions
-process.on('uncaughtException', exitHandler.bind(null, {
-   exit: true
-}));

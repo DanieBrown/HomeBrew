@@ -14,9 +14,9 @@ var sample_data = [];
 var last_time = new Date();
 
 sample_data.push({
-      "Time": last_time,
-      "Temp": 70
-   });
+   "Time": last_time,
+   "Temp": 70
+});
 
 for (var i = 0; i < 10; i++) {
    var temp = getRandomInt(30, 100);
@@ -70,10 +70,6 @@ function getRandomInt(min, max) {
    return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function addMinutes(date, minutes) {
-   return new Date(date.getTime() + minutes * 60000);
-}
-
 var sensor_data_array = [];
 
 function logSensorData() {
@@ -84,11 +80,17 @@ function logSensorData() {
 
 // add another point every 3 seconds
 setInterval(function () {
+   var now = new Date();
+   if (next_time < now) {
+      getNext();
+      console.log("Moving to next temp target: " + cur_temp);
+   }
+
    var in_temp = getRandomInt(30, 100);
    var out_temp = getRandomInt(30, 100);
    var tmp_heat_state = getRandomInt(0, 2);
    var tmp_cool_state = 0;
-   if(tmp_heat_state === 0)
+   if (tmp_heat_state === 0)
       tmp_cool_state = getRandomInt(0, 2);
    var today = new Date();
    sensor_data_array.push({
