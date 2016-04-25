@@ -22,8 +22,7 @@ var inId = '28-00000521bec2';
 var outId = '28-000005218965';
 var sensorId = [];
 var pos = 0; // for keeping track of current point in schedule
-var cur_brew_json;
-var cur_brew_array = [];
+var empty_array = [];
 
 // Generate sample data for currently scheduled brew
 // add minutes: var newDateObj = new Date(oldDateObj.getTime() + diff*60000);
@@ -35,7 +34,7 @@ sample_data.push({
    "Temp": 70
 });
 
-for (var i = 0; i < 10; i++) {
+for (var i = 0; i < 7; i++) {
    var temp = getRandomInt(73, 81);
    var time = new Date(last_time.getTime() + getRandomInt(1, 3) * 10000);
    //   console.log("     time: "+time);
@@ -45,53 +44,97 @@ for (var i = 0; i < 10; i++) {
       "Time": time,
       "Temp": temp
    });
-   console.log("filled sample data array for current brew");
+   console.log("Generating sample data for current brew...");
 }
+
+// Populate current_brew with sample data.
+jsonfile.writeFile('./current_brew.json', sample_data, function (err) {
+   if (err) console.error("error writing to current brew: " + err);
+});
+// Clear array to populate next file
+sample_data.length = 0;
+
+// Generate sample configuration for Next Schedule.
+for (var i = 0; i < 5; i++) {
+   var temp = getRandomInt(73, 81);
+   var time = new Date(last_time.getTime() + getRandomInt(1, 3) * 10000);
+   //   console.log("     time: "+time);
+   var last_time = time;
+   //   console.log("last_time: "+last_time);
+   sample_data.push({
+      "Time": time,
+      "Temp": temp
+   });
+   console.log("Generating sample data for next brew...");
+}
+
+// Populate current_brew with sample data.
+jsonfile.writeFile('./next_brew.json', sample_data, function (err) {
+   if (err) console.error("error writing to next brew: " + err);
+});
 
 function getRandomInt(min, max) {
    return Math.floor(Math.random() * (max - min)) + min;
 }
 
-// Populate current_brew with sample data.
-// Change to real data later (get from next_schedule when it comes up!)
-jsonfile.writeFile('./current_brew.json', sample_data, function (err) {
-   if (err) console.error("error writing to current brew: " + err);
-});
-
 // Assume first temp in cur schedule is not before the cur time.
 var pos = 0;
-var cur_brew_json, cur_time, cur_temp, next_time, next_temp, cur_brew_end, next_brew_start;
-var cur_end_pos;
+var cur_brew_json, next_brew_json, cur_time, cur_temp, next_time, next_temp, cur_end_pos;
 
 // Read in the the current brew schedule to a json object.
-jsonfile.readFile('./current_brew.json', function (err, data) {
-   if (err) console.log("error reading current brew: " + err);
-   JSON.stringify(data);
-   cur_brew_json = data;
+function startCurrentBrew() {
+   jsonfile.readFile('./current_brew.json', function (err, data) {
+      cur_brew_json.length = 0;
+      if (err) console.log("error reading current brew: " + err);
+      JSON.stringify(data);
+      cur_brew_json = data;
 
-   cur_time = cur_brew_json[pos].Time;
-   cur_temp = cur_brew_json[pos].Temp;
-   next_time = cur_brew_json[pos + 1].Time;
-   next_temp = cur_brew_json[pos + 1].Temp;
-   console.log("cur_time: " + cur_time);
-   console.log("cur_temp: " + cur_temp);
-   console.log("next_time: " + next_time);
-   console.log("next_temp: " + next_temp);
+      cur_time = cur_brew_json[pos].Time;
+      cur_temp = cur_brew_json[pos].Temp;
+      next_time = cur_brew_json[pos + 1].Time;
+      next_temp = cur_brew_json[pos + 1].Temp;
+      console.log("cur_time: " + cur_time);
+      console.log("cur_temp: " + cur_temp);
+      console.log("next_time: " + next_time);
+      console.log("next_temp: " + next_temp);
+
+      cur_end_pos = cur_brew_json.length - 1;
+   });
+}
+startCurrentBrew();
+
+function startNextBrew() {
+   jsonfile.readFile('./next_brew.json', function (err, data) {
+      if (err) console.log("error reading next brew: " + err);
+      JSON.stringify(data);
+      cur_brew_json = data;
+   });
    
-   cur_end_pos = cur_brew_json.length - 1;
-});
+   // Clear the next_brew file.
+   jsonfile.writeFile('./next_brew.json', empty_array, function (err) {
+      if (err) console.error(err);
+   });
+   
+   // Start the next one...
+   startCurrentBrew();
+}
 
 // Assign values of next time and temp cur, then get next.
 function getNext() {
    // Terminate loop if you've reached end of schedule.
-   if (pos === cur_end_pos ) {
-      clearInterval(brewer);
+   if (pos === cur_end_pos) {
+      if (isnextbrew) {
+         clearInterval(brewer);
+         console.log("No more brews, shutting down sensors. Ctrl+C to exit.");         
+      } else {
+         console.log("Loading your next brew configuration...");
+      }
    } else {
       pos = pos + 1;
       cur_time = cur_brew_json[pos].Time;
       cur_temp = cur_brew_json[pos].Temp;
       next_time = cur_brew_json[pos + 1].Time;
-      next_temp = cur_brew_json[pos + 1].Temp;      
+      next_temp = cur_brew_json[pos + 1].Temp;
    }
 }
 // set sensor IDs?
@@ -104,7 +147,7 @@ var valF = 0;
 var sensor_data_array = [];
 
 // Clear sensor data file.
-jsonfile.writeFile('./sensor_data.json', sensor_data_array, function (err) {
+jsonfile.writeFile('./sensor_data.json', empty_array, function (err) {
    if (err) console.error(err);
 });
 
@@ -121,7 +164,7 @@ var brewer = setInterval(function () {
 
          // Change target time and temperature if it's time.
          var now = new Date().toISOString();
-         console.log("Checking is next_time ["+next_time+"] <= now ["+now+"]?");
+         console.log("Checking is next_time [" + next_time + "] <= now [" + now + "]?");
          if (next_time <= now) {
             getNext();
             console.log("Moving to next temp target: " + cur_temp);
