@@ -26,47 +26,34 @@ var empty_array = [];
 
 // Generate sample data for currently scheduled brew
 // add minutes: var newDateObj = new Date(oldDateObj.getTime() + diff*60000);
+
 var sample_data = [];
-var last_time = new Date();
 
-sample_data.push({
-   "Time": last_time,
-   "Temp": 70
-});
+function generateSampleData(points) {
+   var last_time = new Date();
 
-for (var i = 0; i < 7; i++) {
-   var temp = getRandomInt(73, 81);
-   var time = new Date(last_time.getTime() + getRandomInt(1, 3) * 10000);
-   //   console.log("     time: "+time);
-   var last_time = time;
-   //   console.log("last_time: "+last_time);
    sample_data.push({
-      "Time": time,
-      "Temp": temp
+      "Time": last_time,
+      "Temp": 70
    });
-}
-console.log("Generated sample data for current brew.");
 
-// Populate current_brew with sample data.
-jsonfile.writeFile('./current_brew.json', sample_data, function (err) {
-   if (err) console.error("error writing to current brew: " + err);
-});
+   for (var i = 0; i < points; i++) {
+      var temp = getRandomInt(73, 81);
+      var time = new Date(last_time.getTime() + getRandomInt(1, 3) * 10000);
+      //   console.log("     time: "+time);
+      var last_time = time;
+      //   console.log("last_time: "+last_time);
+      sample_data.push({
+         "Time": time,
+         "Temp": temp
+      });
+   }
+   console.log("Generated sample data.");
+}
+
 // Clear array to populate next file
 sample_data.length = 0;
 
-// Generate sample configuration for Next Schedule.
-for (var i = 0; i < 5; i++) {
-   var temp = getRandomInt(73, 81);
-   var time = new Date(last_time.getTime() + getRandomInt(1, 3) * 10000);
-   //   console.log("     time: "+time);
-   var last_time = time;
-   //   console.log("last_time: "+last_time);
-   sample_data.push({
-      "Time": time,
-      "Temp": temp
-   });
-}
-console.log("Generating sample data for next brew.");
 
 // Populate current_brew with sample data.
 jsonfile.writeFile('./next_brew.json', sample_data, function (err) {
@@ -85,16 +72,23 @@ var cur_time, cur_temp, next_time, next_temp, cur_end_pos;
 
 // Read in the the current brew schedule to a json object.
 function startCurrentBrew() {
+   generateSampleData(7);
+
+   // Populate current_brew with sample data.
+   jsonfile.writeFile('./current_brew.json', sample_data, function (err) {
+      if (err) console.error("error writing to current brew: " + err);
+   });
+
    jsonfile.readFile('./current_brew.json', function (err, data) {
       if (cur_brew_json !== undefined && cur_brew_json !== []) {
          cur_brew_json.length = 0;
          console.log("empty cur brew.");
       }
-      
+
       if (err) console.log("error reading current brew: " + err);
       JSON.stringify(data);
       cur_brew_json = data;
-      console.log("read json from cur: "+data);
+      console.log("read json from cur: " + data);
 
       cur_time = cur_brew_json[pos].Time;
       cur_temp = cur_brew_json[pos].Temp;
@@ -116,12 +110,12 @@ function startNextBrew() {
       JSON.stringify(data);
       cur_brew_json = data;
    });
-   
+
    // Clear the next_brew file.
    jsonfile.writeFile('./next_brew.json', empty_array, function (err) {
       if (err) console.error(err);
    });
-   
+
    // Start the next one...
    startCurrentBrew();
 }
@@ -132,7 +126,7 @@ function getNext() {
    if (pos === cur_end_pos) {
       if (isnextbrew) {
          clearInterval(brewer);
-         console.log("No more brews, shutting down sensors. Ctrl+C to exit.");         
+         console.log("No more brews, shutting down sensors. Ctrl+C to exit.");
       } else {
          console.log("Loading your next brew configuration...");
       }
