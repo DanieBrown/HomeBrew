@@ -2,23 +2,29 @@
 var chart_view = angular.module('chart_view_module', ["highcharts-ng"]);
 
 chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
-   var dataset = [];
+   var current_brew = [];
+   var live_readings = [];
+//   $scope.current_water_temp;
 
-
+   // populate graph with currently scheduled brew.
    $http.get('/getCurrentSchedule').success(function (response) {
       for (i = 0; i < response.length; i++) {
-         dataset.push([response[i].Time, response[i].Temp]);
+         current_brew.push([response[i].Time, response[i].Temp]);
       }
    });
-
+   
+   // populate graph with currently scheduled brew.
+   $http.get('/getSensorData').success(function (response) {
+      for (i = 0; i < response.length; i++) {
+         live_readings.push([response[i].Water.Time, response[i].Water.Temp]);
+      }
+   });
+   
    setInterval(function () {
-      var last_dataset = dataset.slice();
-      //      dataset.length = 0;
-
-      $http.get('/getCurrentSchedule').success(function (response) {
-         if (dataset.length !== response.length) {
-            for (i = dataset.length - 1; i < response.length; i++) {
-               dataset.push([response[i].Time, response[i].Temp]);
+      $http.get('/getSensorData').success(function (response) {
+         if (live_readings.length !== response.length) {
+            for (i = live_readings.length - 1; i < response.length; i++) {
+               live_readings.push([response[i].Water.Time, response[i].Water.Temp]);
             }
          }
       });
@@ -35,7 +41,6 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
                minute: '%H:%M',
                hour: '%H:%M',
                day: '%e. %b'
-//               year: '%Y'
             },
             tickPixelInterval: 100,
             title: {
@@ -44,10 +49,14 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
          }
       },
       series: [{
-         data: dataset
+         name: 'Current Brew',
+         data: current_brew
+    }, {
+       name: 'Readings',
+       data: live_readings
     }],
       title: {
-         text: 'db.name'
+         text: 'All the data you will ever need...'
       },
       loading: false
    }
