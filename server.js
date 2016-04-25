@@ -174,6 +174,13 @@ var brewer = setInterval(function () {
    sensorId.forEach(function (id) {
       ds18b20.temperature(id, function (err, val) {
          valC = val;
+         
+         // Get Farenheit
+         if (valC != false) {
+            valF = Math.round((valC * 1.8) + 32, -2);
+         } else {
+            valF = false;
+         }
 
          console.log('id: ', id, ' value in C: ', valC, ' value in F: ', valF);
          var time = new Date();
@@ -209,15 +216,6 @@ var brewer = setInterval(function () {
          if (next_time <= now) {
             getNext();
          }
-
-         // Get Farenheit
-         if (valC != false) {
-            valF = Math.round((valC * 1.8) + 32, -2);
-         } else {
-            valF = false;
-         }
-
-         var id = inId;
 
          // If water temp < target temp, heat
          if (id == inId && valF < cur_temp) {
