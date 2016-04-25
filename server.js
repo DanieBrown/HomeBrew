@@ -44,8 +44,8 @@ for (var i = 0; i < 7; i++) {
       "Time": time,
       "Temp": temp
    });
-   console.log("Generating sample data for current brew...");
 }
+console.log("Generated sample data for current brew.");
 
 // Populate current_brew with sample data.
 jsonfile.writeFile('./current_brew.json', sample_data, function (err) {
@@ -65,8 +65,8 @@ for (var i = 0; i < 5; i++) {
       "Time": time,
       "Temp": temp
    });
-   console.log("Generating sample data for next brew...");
 }
+console.log("Generating sample data for next brew.");
 
 // Populate current_brew with sample data.
 jsonfile.writeFile('./next_brew.json', sample_data, function (err) {
@@ -84,12 +84,15 @@ var cur_brew_json, next_brew_json, cur_time, cur_temp, next_time, next_temp, cur
 // Read in the the current brew schedule to a json object.
 function startCurrentBrew() {
    jsonfile.readFile('./current_brew.json', function (err, data) {
-      if (cur_brew_json !== undefined)
+      if (cur_brew_json !== undefined || cur_brew_json !== []) {
          cur_brew_json.length = 0;
+         console.log("empty cur brew.");
+      }
       
       if (err) console.log("error reading current brew: " + err);
       JSON.stringify(data);
       cur_brew_json = data;
+      console.log("read json from cur: "+cur_brew_json);
 
       cur_time = cur_brew_json[pos].Time;
       cur_temp = cur_brew_json[pos].Temp;
