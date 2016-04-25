@@ -23,10 +23,11 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
          var now = new Date(response[i].Time);
          var time = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
          
-         if (response[i].Sensor === 'water')
+         if (response[i].Sensor === 'water') {
             water_readings.push([time, response[i].Temp]);
-         else
+         } else if (response[i].Sensor === 'room') {
             room_readings.push([time, response[i].Temp]);
+         }
       }
    });
 
