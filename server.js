@@ -61,6 +61,7 @@ jsonfile.writeFile('./current_brew.json', sample_data, function (err) {
 // Assume first temp in cur schedule is not before the cur time.
 var pos = 0;
 var cur_brew_json, cur_time, cur_temp, next_time, next_temp, cur_brew_end, next_brew_start;
+var cur_end_pos;
 
 // Read in the the current brew schedule to a json object.
 jsonfile.readFile('./current_brew.json', function (err, data) {
@@ -76,11 +77,17 @@ jsonfile.readFile('./current_brew.json', function (err, data) {
    console.log("cur_temp: " + cur_temp);
    console.log("next_time: " + next_time);
    console.log("next_temp: " + next_temp);
+   
+   cur_end_pos = cur_brew_json.length-1;
 });
 
 // Assign values of next time and temp cur, then get next.
 function getNext() {
-   console.log("getting next..");
+   // Terminate loop if you've reached end of schedule.
+   if (pos === cur_end_pos ) {
+      clearInterval(brewer);
+   }
+   
    pos = pos + 1;
    cur_time = cur_brew_json[pos].Time;
    cur_temp = cur_brew_json[pos].Temp;
@@ -107,7 +114,7 @@ b.digitalWrite(blueLed, 0);
 // ONLY USE TEMP_TARGET FOR TESTING
 //var tempTarget = 75;
 // DELETE TEMP_TARGET WHEN DONE TESTING
-setInterval(function () {
+var brewer = setInterval(function () {
    sensorId.forEach(function (id) {
       ds18b20.temperature(id, function (err, val) {
          valC = val;
