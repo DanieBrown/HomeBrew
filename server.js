@@ -47,8 +47,8 @@ function generateSampleData(points) {
          "Time": time,
          "Temp": temp
       });
+   console.log("Generated sample data: " + sample_data +"\n");
    }
-   console.log("Generated sample data.");
 }
 
 function getRandomInt(min, max) {
@@ -70,21 +70,16 @@ function startCurrentBrew() {
       if (err) console.error("error writing to current brew: " + err);
    });
    
-   // Clear array to populate next file
-   sample_data.length = 0;
-
-   generateSampleData(5);
-   // Populate current_brew with sample data.
-   jsonfile.writeFile('./next_brew.json', sample_data, function (err) {
-      if (err) console.error("error writing to next brew: " + err);
-   });
+//   // Clear array to populate next file
+//   sample_data.length = 0;
+//
+//   generateSampleData(5);
+//   // Populate current_brew with sample data.
+//   jsonfile.writeFile('./next_brew.json', sample_data, function (err) {
+//      if (err) console.error("error writing to next brew: " + err);
+//   });
 
    jsonfile.readFile('./current_brew.json', function (err, data) {
-      if (cur_brew_json !== undefined && cur_brew_json !== []) {
-         cur_brew_json.length = 0;
-         console.log("empty cur brew.");
-      }
-
       if (err) console.log("error reading current brew: " + err);
       JSON.stringify(data);
       cur_brew_json = data;
