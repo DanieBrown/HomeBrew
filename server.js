@@ -25,6 +25,42 @@ var inId = '28-00000521bec2';
 var outId = '28-000005218965';
 var sensorId = [];
 
+var cur_idx = 0;
+
+//var next_time;
+//
+//var next_temp;
+//
+//var curr_time;
+//
+//var curr_temp;
+
+
+
+var curr_brew_array = jsonfile.readFile('./current_brew.json', function (err, jsonfile_data) {
+ });
+var curr_pos = 0;
+
+
+//Get JSON object of the current schedule (non changing)
+function getNextTimeAndTemp() {
+	curr_time = next_time;	
+	curr_temp = next_temp;
+	next_time = curr_brew_array[curr_pos+2].Time;
+	
+	next_temp = curr_brew_array[curr_pos+2].Temp;
+	
+	curr_pos++;
+	
+	res.json(next_time,next_temp);
+}
+
+
+
+
+
+
+
 // set sensor IDs?
 ds18b20.sensors(function (err, id) {
    sensorId = id;
