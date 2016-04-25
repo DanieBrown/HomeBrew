@@ -22,7 +22,7 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
       for (i = 0; i < response.length; i++) {
          var now = new Date(response[i].Time);
          var time = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-         
+
          if (response[i].Sensor === 'water') {
             water_readings.push([time, response[i].Temp]);
          } else if (response[i].Sensor === 'room') {
@@ -37,7 +37,11 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
             for (i = water_readings.length - 1; i < response.length; i++) {
                var now = new Date(response[i].Time);
                var time = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-               water_readings.push([time, response[i].Temp]);
+               if (response[i].Sensor === 'water') {
+                  water_readings.push([time, response[i].Temp]);
+               } else if (response[i].Sensor === 'room') {
+                  room_readings.push([time, response[i].Temp]);
+               }
             }
          }
       });
@@ -62,7 +66,7 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
          tooltip: {
             headerFormat: '<b>{series.name}</b><br>',
             pointFormat: '{point.x:%H:%M:%S"}: {point.y} °F'
-         // pointFormat: '{point.x:%A, %b %e, %H:%M"}: {point.y:.2f} °F'
+               // pointFormat: '{point.x:%A, %b %e, %H:%M"}: {point.y:.2f} °F'
          }
       },
       series: [{
@@ -91,10 +95,10 @@ newbrew.controller('create_ctrl', function ($scope, $timeout, $http) {
       var data = $scope.highchartsNG.series[0].data
       var now = new Date(point.time);
       var time = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-//      alert(point.time);
-//      alert(now)
-//      alert(time);
-      
+      //      alert(point.time);
+      //      alert(now)
+      //      alert(time);
+
       $scope.highchartsNG.series[0].data = data.concat([[time, point.temp]]);
       var newJsonPoint = [{
          "Time": time,
@@ -126,7 +130,7 @@ newbrew.controller('create_ctrl', function ($scope, $timeout, $http) {
          tooltip: {
             headerFormat: '<b>{series.name}</b><br>',
             pointFormat: '{point.x:%H:%M:%S"}: {point.y} °F'
-         // pointFormat: '{point.x:%A, %b %e, %H:%M"}: {point.y:.2f} °F'
+               // pointFormat: '{point.x:%A, %b %e, %H:%M"}: {point.y:.2f} °F'
          }
       },
       series: [{
