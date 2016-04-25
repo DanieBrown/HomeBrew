@@ -59,6 +59,7 @@ function getRandomInt(min, max) {
 var pos = 0;
 var cur_brew_json = [];
 var next_brew_json = [];
+var isnextbrew = false;
 var cur_time, cur_temp, next_time, next_temp, cur_end_pos;
 
 // Return true if the next_brew file contains a config.
@@ -88,6 +89,7 @@ function startCurrentBrew() {
    jsonfile.writeFile('./next_brew.json', next_generated_data, function (err) {
       if (err) console.error("error writing to next brew: " + err);
    });
+   isnextbrew = isNextBrew();
 
    jsonfile.readFile('./current_brew.json', function (err, data) {
       if (err) console.log("error reading current brew: " + err);
