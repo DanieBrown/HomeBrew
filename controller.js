@@ -5,7 +5,8 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
    var current_brew = [];
    var water_readings = [];
    var room_readings = [];
-   //   $scope.current_water_temp;
+   var heating = [];
+   var cooling = [];
 
    // populate graph with currently scheduled brew.
    $http.get('/getCurrentSchedule').success(function (response) {
@@ -27,6 +28,20 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
          } else if (response[i].Sensor === 'room') {
             room_readings.push([time, response[i].Temp]);
          }
+
+         // populate heating area chart
+         if (response[i].Heating === 1) {
+            heating.push([time, response[i].Temp]);
+         } else {
+            heating.push([time, null]);
+         }
+
+         // populate heating area chart
+         if (response[i].Cooling === 1) {
+            cooling.push([time, response[i].Temp]);
+         } else {
+            cooling.push([time, null]);
+         }
       }
    });
 
@@ -41,16 +56,29 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
                } else if (response[i].Sensor === 'room') {
                   room_readings.push([time, response[i].Temp]);
                }
+               // populate heating area chart
+               if (response[i].Heating === 1) {
+                  heating.push([time, response[i].Temp]);
+               } else {
+                  heating.push([time, null]);
+               }
+
+               // populate heating area chart
+               if (response[i].Cooling === 1) {
+                  cooling.push([time, response[i].Temp]);
+               } else {
+                  cooling.push([time, null]);
+               }
             }
          }
       });
-   }, 3000);
+   }, 850);
 
    $scope.highchartsNG = {
       options: {
-         chart: {
-            type: 'line'
-         },
+         //         chart: {
+         //            type: 'line'
+         //         },
          xAxis: {
             type: 'datetime',
             labels: {
@@ -69,14 +97,27 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
          }
       },
       series: [{
+         type: 'spline',
          name: 'Brew Schedule',
          data: current_brew
     }, {
+         type: 'line',
          name: 'Water Temperature',
          data: water_readings
     }, {
+         type: 'line',
          name: 'Room Temperature',
          data: room_readings
+    }, {
+         type: 'area',
+         color: '#FA8072',
+         name: 'Heating',
+         data: heating
+    }, {
+         type: 'area',
+         color: '#87CEEB',
+         name: 'Cooling',
+         data: cooling
     }],
       title: {
          text: 'All the data you will ever need...'
@@ -105,6 +146,10 @@ newbrew.controller('create_ctrl', function ($scope, $timeout, $http) {
 
    $scope.schedule = function () {
       $http.post('/postNewSchedule', jsonData);
+   }
+
+   $scope.setSensingInterval = function (interval) {
+      $http.post('/postNewIntervals', interval);
    }
 
    $scope.highchartsNG = {

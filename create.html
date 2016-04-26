@@ -38,7 +38,7 @@
          <p class="lead">Build your new brew temperature profile.</p>
          <highchart id="chart1" config="highchartsNG"></highchart>
          <div class="form-group">
-            <!-- New Temperature Input -->
+            <!-- New Schedule Nams Input -->
             <label for="brew-name" class="control-label">Schedule Name:</label>
             <div class="control">
                <input id="brew-name" class="form-control" data-ng-model="highchartsNG.title.text">
@@ -60,7 +60,8 @@
             </div>
          </div>
 
-         <p><a class="btn btn-lg btn-primary" data-ng-click="addPoint(point)">Add Point</a>
+         <p>
+            <a class="btn btn-lg btn-primary" data-ng-click="addPoint(point)">Add Point</a>
             <a class="btn btn-lg btn-primary pull-right" data-ng-click="schedule()">Schedule This Brew</a>
          </p>
       </div>

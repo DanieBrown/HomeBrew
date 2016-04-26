@@ -8,26 +8,25 @@ var bodyParser = require('body-parser'); // npm install --save body-parser
 app.use(bodyParser.json()); // to de-serialize?
 
 // Sensor imports
-//var ds18b20 = require('ds18b20'); // npm install --save ds18b20
-//var b = require('bonescript');
-//var led = "P8_13";
-//var blueLed = "P8_12";
-//b.pinMode(led, 'out');
-//b.pinMode(blueLed, 'out');
+var ds18b20 = require('ds18b20'); // npm install --save ds18b20
+var b = require('bonescript');
+var led = "P8_13";
+var blueLed = "P8_12";
+b.pinMode(led, 'out');
+b.pinMode(blueLed, 'out');
 
 // Global variables for sensing
 var redState = 0;
 var blueState = 0;
 var inId = '28-00000521bec2';
-//var outId = '28-000005218965';
-//var sensorId = [];
+var outId = '28-000005218965';
+var sensorId = [];
 var pos = 0; // for keeping track of current point in schedule
 var empty_array = [];
 
 // Generate sample data for currently scheduled brew
 // add minutes: var newDateObj = new Date(oldDateObj.getTime() + diff*60000);
 function generateSampleData(points, start_date) {
-//   var last_time = new Date();
    var sample_data = [];
 
    sample_data.push({
@@ -68,7 +67,7 @@ function init() {
    });
 
    var len_cur = cur_generated_data.length;
-   var next_start_date = cur_generated_data[len_cur-1].Time;
+   var next_start_date = cur_generated_data[len_cur - 1].Time;
    var next_generated_data = generateSampleData(1, next_start_date);
 
    // Populate current_brew with sample data.
@@ -83,12 +82,11 @@ init();
 function startCurrentBrew() {
    jsonfile.readFile('./current_brew.json', function (err, data) {
       if (err) console.log("error reading current brew: " + err);
-//      JSON.stringify(data);
       cur_brew_json = data;
-//      console.log("read json from cur: " + data);
+      //      console.log("read json from cur: " + data);
       console.log("Current brew is now: ");
       console.log(cur_brew_json);
-      
+
       pos = 0;
       cur_time = cur_brew_json[pos].Time;
       cur_temp = cur_brew_json[pos].Temp;
@@ -129,7 +127,7 @@ function startNextBrew() {
 
 // Assign values of next time and temp cur, then get next.
 function getNext() {
-   console.log("       pos: "+pos+" | next_pos: "+(pos+1)+" | last_idx: "+cur_end_pos);
+   console.log("       pos: " + pos + " | next_pos: " + (pos + 1) + " | last_idx: " + cur_end_pos);
    // Terminate loop if you've reached end of schedule.
    if (pos === cur_end_pos) {
       if (isnextbrew) {
@@ -141,121 +139,85 @@ function getNext() {
       }
    } else {
       pos = pos + 1;
-      
-      console.log("now at pos: "+pos+" | next_pos: "+(pos+1)+" | last_idx: "+cur_end_pos);
+
+      console.log("now at pos: " + pos + " | next_pos: " + (pos + 1) + " | last_idx: " + cur_end_pos);
       cur_time = cur_brew_json[pos].Time;
       cur_temp = cur_brew_json[pos].Temp;
-      
+
       if (pos !== cur_end_pos) {
          next_time = cur_brew_json[pos + 1].Time;
-         next_temp = cur_brew_json[pos + 1].Temp;         
+         next_temp = cur_brew_json[pos + 1].Temp;
       }
-//      console.log("next_time: "+next_time);
    }
 }
 // set sensor IDs?
-//ds18b20.sensors(function (err, id) {
-//   sensorId = id;
-//});
+ds18b20.sensors(function (err, id) {
+   sensorId = id;
+});
 
-//var valC = 0;
-//var valF = 0;
+var valC = 0;
+var valF = 0;
 var sensor_data_array = [];
+var heat_rate = 5;
+var cool_rate = 5;
 
 // Clear sensor data file.
 jsonfile.writeFile('./sensor_data.json', empty_array, function (err) {
    if (err) console.error(err);
 });
 
-//b.digitalWrite(led, 0);
-//b.digitalWrite(blueLed, 0);
-
-var rate = 1.39e-6;
-var interval = 2000;
+b.digitalWrite(led, 0);
+b.digitalWrite(blueLed, 0);
 
 // ONLY USE TEMP_TARGET FOR TESTING
 //var tempTarget = 75;
 // DELETE TEMP_TARGET WHEN DONE TESTING
 var brewer = setInterval(function () {
-//   sensorId.forEach(function (id) {
-//      ds18b20.temperature(id, function (err, val) {
-//         valC = val;
-//
-//         // console.log('id: ', id, ' value in C: ', valC, ' value in F: ', valF);
-//         var time = new Date();
-//         // log to json file
-//         if (valF != false) {
-//            if (id === "28-000005218965") {
-//               sensor_data_array.push({
-//                  "Sensor": 'room',
-//                  "Time": time,
-//                  "Temp": valF,
-//                  "Heating": redState,
-//                  "Cooling": blueState
-//               });
-//            } else {
-//               sensor_data_array.push({
-//                  "Sensor": 'water',
-//                  "Time": time,
-//                  "Temp": valF,
-//                  "Heating": redState,
-//                  "Cooling": blueState
-//               });
-//            }
-//         }
-//         // After pushing to the sensor_data_array, re-write to the json file.
-//         logSensorData();
-
-         var in_temp = getRandomInt(75, 82);
-         var valC = in_temp;
-         var valF;
-         var out_temp = getRandomInt(75, 82);
-         var tmp_heat_state = getRandomInt(0, 2);
-         var tmp_cool_state = 0;
-         if (tmp_heat_state === 0)
-            tmp_cool_state = getRandomInt(0, 2);
-         var today = new Date();
-//         sensor_data_array.push({
-//            "Sensor": 'room',
-//            "Time": today,
-//            "Temp": out_temp,
-//            "Heating": tmp_heat_state,
-//            "Cooling": tmp_cool_state
-//         });
-         sensor_data_array.push({
-            "Sensor": 'water',
-            "Time": today,
-            "Temp": in_temp,
-            "Heating": tmp_heat_state,
-            "Cooling": tmp_cool_state
-         });
-         logSensorData();
-//         console.log("logged 2 random temp senses.");
-
-         // Change target time and temperature if it's time.
-         var now = new Date().toISOString();
-//         console.log("Time til next time: "+ (next_time - now));
+   sensorId.forEach(function (id) {
+      ds18b20.temperature(id, function (err, val) {
+         valC = val;
          
-   
-         // SUBTRACT 3 hours from next time when comparing to current time!
-         // var next_change = new Date(next_time - 1*60*60*1000);
-         // if (next_change <= now) {
-         if (next_time <= now) {
-            getNext();
-         }
-//         else if (next_time === false) {
-//             console.log("no next time, just get next brew...");
-//            startNextBrew();
-//         }
-
          // Get Farenheit
          if (valC != false) {
             valF = Math.round((valC * 1.8) + 32, -2);
          } else {
             valF = false;
          }
-   
-         var id = inId;
+
+         console.log('id: ', id, ' value in C: ', valC, ' value in F: ', valF);
+         var time = new Date();
+         // log to json file
+         if (valF != false) {
+            if (id === "28-000005218965") {
+               sensor_data_array.push({
+                  "Sensor": 'room',
+                  "Time": time,
+                  "Temp": valF,
+                  "Heating": redState,
+                  "Cooling": blueState
+               });
+            } else {
+               sensor_data_array.push({
+                  "Sensor": 'water',
+                  "Time": time,
+                  "Temp": valF,
+                  "Heating": redState,
+                  "Cooling": blueState
+               });
+            }
+         }
+         // After pushing to the sensor_data_array, re-write to the json file.
+         logSensorData();
+
+         // Change target time and temperature if it's time.
+         var now = new Date().toISOString();
+
+         // SUBTRACT 3 hours from next time when comparing to current time!
+         // var next_change = new Date(next_time - 1*60*60*1000);
+         // if (next_change <= now) {
+         if (next_time <= now) {
+            getNext();
+         }
 
          // If water temp < target temp, heat
          if (id == inId && valF < cur_temp) {
@@ -270,24 +232,14 @@ var brewer = setInterval(function () {
          } else if (id == inId && valF != false) {
             blueState = 0;
          }
-   
-         // Prediction: 
-         var temp_diff = next_temp - cur_temp;
-         var time_to_change = new Date(temp_diff/rate);
          
-         if((time_to_change <= now ) && (next_temp > cur_temp)) {
-            console.log("Start heating now, next temp is : "+next_temp);
-            redState = 1;
-         } else if ((time_to_change <= now ) && (next_temp < cur_temp)) {
-            console.log("Start cooling now, next temp is : "+next_temp);
-            blueState = 1;
-         }
-
-//         b.digitalWrite(led, redState);
-//         b.digitalWrite(blueLed, blueState);
-//      });
-//   });
-}, interval);
+         // Prediction: 
+         
+         b.digitalWrite(led, redState);
+         b.digitalWrite(blueLed, blueState);
+      });
+   });
+}, 2000);
 
 function logSensorData() {
    jsonfile.writeFile('./sensor_data.json', sensor_data_array, function (err) {
@@ -310,16 +262,9 @@ app.get('/getCurrentSchedule', function (req, res) {
    });
 });
 
-// Get JSON object of the current schedule (non changing)
-app.get('/getNextSchedule', function (req, res) {
-   jsonfile.readFile('./next_brew.json', function (err, jsonfile) {
-      res.json(jsonfile);
-   });
-});
-
 // Write data from create.html to JSON file for the next schedule
 app.post('/postNewSchedule', function (req, res) {
-   console.log("Called postNewSchedule method in server.");
+   console.log("Called post method in controller.");
    console.log(req.body);
    jsonfile.writeFile('./next_brew.json', req.body, function (err) {
       if (err) console.error(err);
@@ -327,17 +272,9 @@ app.post('/postNewSchedule', function (req, res) {
    });
 });
 
-// Set interval
-app.post('/postNewInterval', function (req, res) {
-   console.log("Called setInterval method in server:");
-   console.log(req.body);
-   interval = req.body;
-});
-
 /* serves main page */
 app.get("/", function (req, res) {
-//   res.sendFile('index.html');
-    res.sendFile(__dirname + '/index.html');
+   res.sendFile('index.html');
 });
 
 /* serves all the static files */
@@ -349,7 +286,6 @@ app.get(/^(.+)$/, function (req, res) {
 var port = process.env.PORT || 5000;
 app.listen(port, function () {
    console.log("Listening on " + port);
-   // console.log("full path is: " + (__dirname + '/img/favicon.ico'));
 });
 
 process.stdin.resume(); //so the program will not close instantly
@@ -360,8 +296,31 @@ function exitHandler(options, err) {
    if (err) console.log(err.stack);
    if (options.exit) process.exit();
 
-   //   b.digitalWrite(led, 0);
-   //   b.digitalWrite(blueLed, 0);
+   b.digitalWrite(led, 0);
+   b.digitalWrite(blueLed, 0);
+}
+
+function clearDataFiles() {
+   // Clear the next_brew file.
+   jsonfile.writeFile('./next_brew.json', empty_array, function (err) {
+      isnextbrew = false;
+      if (err) console.error(err);
+      else console.log("Clearing next_brew.json file...");
+   });
+   
+   // Clear the current_brew file.
+   jsonfile.writeFile('./current_brew.json', empty_array, function (err) {
+      isnextbrew = false;
+      if (err) console.error(err);
+      else console.log("Clearing current_brew.json file...");
+   });
+   
+   // Clear the sensor_data file.
+   jsonfile.writeFile('./sensor_data.json', empty_array, function (err) {
+      isnextbrew = false;
+      if (err) console.error(err);
+      else console.log("Clearing sensor_data.json file...");
+   });   
 }
 
 //do something when app is closing
@@ -378,9 +337,3 @@ process.on('SIGINT', exitHandler.bind(null, {
 process.on('uncaughtException', exitHandler.bind(null, {
    exit: true
 }));
-
-function logSensorData() {
-   jsonfile.writeFile('./sensor_data.json', sensor_data_array, function (err) {
-      if (err) console.error(err);
-   });
-}
