@@ -35,7 +35,7 @@ function generateSampleData(points, start_date) {
    });
 
    for (var i = 0; i < points; i++) {
-      var temp = getRandomInt(70, 81);
+      var temp = getRandomInt(76, 77);
       var time = new Date(start_date.getTime() + getRandomInt(1, 3) * 60000);
       start_date = time;
       sample_data.push({
