@@ -303,7 +303,7 @@ function isNextBrew() {
 
       if (jsonfile === []) isnextbrew = false;
       if (jsonfile === undefined) isnextbrew = false;
-      if (jsonfile.length ==== 0) isnextbrew = false;
+      if (jsonfile.length === 0) isnextbrew = false;
    });
 }
 
