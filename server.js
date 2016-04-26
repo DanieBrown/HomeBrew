@@ -60,7 +60,7 @@ isnextbrew = isNextBrew();
 var cur_time, cur_temp, next_time, next_temp, cur_end_pos;
 
 function init() {
-//   var cur_generated_data = generateSampleData(6, new Date());
+   var cur_generated_data = generateSampleData(6, new Date());
 
    // Populate current_brew with sample data.
    jsonfile.writeFile('./current_brew.json', cur_generated_data, function (err) {
