@@ -1,4 +1,10 @@
-# HomeBrew Optimization 
+# HomeBrew Optimization
+The BeagleBone Black used for development in this project is running out of the box operating system (Debian) and no updates were installed on the system other than the necessary package installations to run this project.
+
+### Directions for Installation
+To install the directory you may wish to download a zip from our [NCSU GitHub Repository](https://github.ncsu.edu/wireless-sensors/HomeBrew) or run the command `git clone https://github.ncsu.edu/wireless-sensors/HomeBrew.git` while logged in to your BeagleBone.
+
+
 
 
 
