@@ -60,7 +60,7 @@ isnextbrew = isNextBrew();
 var cur_time, cur_temp, next_time, next_temp, cur_end_pos;
 
 function init() {
-   var cur_generated_data = generateSampleData(2, new Date());
+   var cur_generated_data = generateSampleData(6, new Date());
 
    // Populate current_brew with sample data.
    jsonfile.writeFile('./current_brew.json', cur_generated_data, function (err) {
@@ -100,6 +100,9 @@ function startCurrentBrew() {
 startCurrentBrew();
 
 function startNextBrew() {
+   b.digitalWrite(led, 0);
+   b.digitalWrite(blueLed, 0);   
+   
    console.log("Loading your next brew configuration...");
    jsonfile.readFile('./next_brew.json', function (err, data) {
       if (err) console.log("error reading next brew: " + err);
