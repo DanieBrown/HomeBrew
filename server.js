@@ -67,15 +67,15 @@ function init() {
       if (err) console.error("error writing to current brew: " + err);
    });
 
-   var len_cur = cur_generated_data.length;
-   var next_start_date = cur_generated_data[len_cur - 1].Time;
-   var next_generated_data = generateSampleData(1, next_start_date);
-
-   // Populate current_brew with sample data.
-   jsonfile.writeFile('./next_brew.json', next_generated_data, function (err) {
-      if (err) console.error("error writing to next brew: " + err);
-      isnextbrew = true;
-   });
+//   var len_cur = cur_generated_data.length;
+//   var next_start_date = cur_generated_data[len_cur - 1].Time;
+//   var next_generated_data = generateSampleData(1, next_start_date);
+//
+//   // Populate current_brew with sample data.
+//   jsonfile.writeFile('./next_brew.json', next_generated_data, function (err) {
+//      if (err) console.error("error writing to next brew: " + err);
+//      isnextbrew = true;
+//   });
 }
 init();
 
