@@ -60,7 +60,7 @@ var isnextbrew = false;
 var cur_time, cur_temp, next_time, next_temp, cur_end_pos;
 
 function init() {
-   var cur_generated_data = generateSampleData(2, new Date());
+   var cur_generated_data = generateSampleData(7, new Date());
 
    // Populate current_brew with sample data.
    jsonfile.writeFile('./current_brew.json', cur_generated_data, function (err) {
@@ -69,13 +69,13 @@ function init() {
 
    var len_cur = cur_generated_data.length;
    var next_start_date = cur_generated_data[len_cur-1].Time;
-   var next_generated_data = generateSampleData(1, next_start_date);
+//   var next_generated_data = generateSampleData(3, next_start_date);
 
-   // Populate current_brew with sample data.
-   jsonfile.writeFile('./next_brew.json', next_generated_data, function (err) {
-      if (err) console.error("error writing to next brew: " + err);
-      isnextbrew = true;
-   });
+//   // Populate next_brew file with sample data.
+//   jsonfile.writeFile('./next_brew.json', next_generated_data, function (err) {
+//      if (err) console.error("error writing to next brew: " + err);
+//      isnextbrew = true;
+//   });
 }
 init();
 
@@ -271,17 +271,17 @@ var brewer = setInterval(function () {
             blueState = 0;
          }
    
-         // Prediction: 
-         var temp_diff = next_temp - cur_temp;
-         var time_to_change = new Date(temp_diff/rate);
-         
-         if((time_to_change <= now ) && (next_temp > cur_temp)) {
-            console.log("Start heating now, next temp is : "+next_temp);
-            redState = 1;
-         } else if ((time_to_change <= now ) && (next_temp < cur_temp)) {
-            console.log("Start cooling now, next temp is : "+next_temp);
-            blueState = 1;
-         }
+//         // Prediction: 
+//         var temp_diff = next_temp - cur_temp;
+//         var time_to_change = new Date(temp_diff/rate);
+//         
+//         if((time_to_change <= now ) && (next_temp > cur_temp)) {
+//            console.log("Start heating now, next temp is : "+next_temp);
+//            redState = 1;
+//         } else if ((time_to_change <= now ) && (next_temp < cur_temp)) {
+//            console.log("Start cooling now, next temp is : "+next_temp);
+//            blueState = 1;
+//         }
 
 //         b.digitalWrite(led, redState);
 //         b.digitalWrite(blueLed, blueState);

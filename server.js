@@ -56,6 +56,7 @@ var pos = 0;
 var cur_brew_json = [];
 var next_brew_json = [];
 var isnextbrew = false;
+isnextbrew = isNextBrew();
 var cur_time, cur_temp, next_time, next_temp, cur_end_pos;
 
 function init() {
@@ -241,6 +242,14 @@ function logSensorData() {
    jsonfile.writeFile('./sensor_data.json', sensor_data_array, function (err) {
       if (err)
          console.error(err);
+   });
+}
+
+function isNextBrew() {
+    jsonfile.readFile('./next_brew.json', function (err, jsonfile) {
+      if (err) isnextbrew = false;
+       else isnextbrew = true;
+//       res.json(jsonfile);
    });
 }
 
