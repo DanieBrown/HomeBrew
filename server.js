@@ -67,15 +67,15 @@ function init() {
       if (err) console.error("error writing to current brew: " + err);
    });
 
-//   var len_cur = cur_generated_data.length;
-//   var next_start_date = cur_generated_data[len_cur - 1].Time;
-//   var next_generated_data = generateSampleData(1, next_start_date);
-//
-//   // Populate current_brew with sample data.
-//   jsonfile.writeFile('./next_brew.json', next_generated_data, function (err) {
-//      if (err) console.error("error writing to next brew: " + err);
-//      isnextbrew = true;
-//   });
+   //   var len_cur = cur_generated_data.length;
+   //   var next_start_date = cur_generated_data[len_cur - 1].Time;
+   //   var next_generated_data = generateSampleData(1, next_start_date);
+   //
+   //   // Populate current_brew with sample data.
+   //   jsonfile.writeFile('./next_brew.json', next_generated_data, function (err) {
+   //      if (err) console.error("error writing to next brew: " + err);
+   //      isnextbrew = true;
+   //   });
 }
 init();
 
@@ -101,8 +101,8 @@ startCurrentBrew();
 
 function startNextBrew() {
    b.digitalWrite(led, 0);
-   b.digitalWrite(blueLed, 0);   
-   
+   b.digitalWrite(blueLed, 0);
+
    console.log("Loading your next brew configuration...");
    jsonfile.readFile('./next_brew.json', function (err, data) {
       if (err) console.log("error reading next brew: " + err);
@@ -178,7 +178,7 @@ var brewer = setInterval(function () {
    sensorId.forEach(function (id) {
       ds18b20.temperature(id, function (err, val) {
          valC = val;
-         
+
          // Get Farenheit
          if (valC != false) {
             valF = Math.round((valC * 1.8) + 32, -2);
@@ -249,10 +249,12 @@ function logSensorData() {
 }
 
 function isNextBrew() {
-    jsonfile.readFile('./next_brew.json', function (err, jsonfile) {
+   jsonfile.readFile('./next_brew.json', function (err, jsonfile) {
       if (err) isnextbrew = false;
-       else isnextbrew = true;
-//       res.json(jsonfile);
+      else isnextbrew = true;
+
+      if (jsonfile === []) isnextbrew = false;
+      res.json(jsonfile);
    });
 }
 
@@ -307,26 +309,26 @@ function exitHandler(options, err) {
    b.digitalWrite(led, 0);
    b.digitalWrite(blueLed, 0);
 
-//   // Clear the next_brew file.
-//   jsonfile.writeFile('./next_brew.json', empty_array, function (err) {
-//      isnextbrew = false;
-//      if (err) console.error(err);
-//      else console.log("Clearing next_brew.json file...");
-//   });
-//   
-//   // Clear the current_brew file.
-//   jsonfile.writeFile('./current_brew.json', empty_array, function (err) {
-//      isnextbrew = false;
-//      if (err) console.error(err);
-//      else console.log("Clearing current_brew.json file...");
-//   });
-//   
-//   // Clear the sensor_data file.
-//   jsonfile.writeFile('./sensor_data.json', empty_array, function (err) {
-//      isnextbrew = false;
-//      if (err) console.error(err);
-//      else console.log("Clearing sensor_data.json file...");
-//   });
+   //   // Clear the next_brew file.
+   //   jsonfile.writeFile('./next_brew.json', empty_array, function (err) {
+   //      isnextbrew = false;
+   //      if (err) console.error(err);
+   //      else console.log("Clearing next_brew.json file...");
+   //   });
+   //   
+   //   // Clear the current_brew file.
+   //   jsonfile.writeFile('./current_brew.json', empty_array, function (err) {
+   //      isnextbrew = false;
+   //      if (err) console.error(err);
+   //      else console.log("Clearing current_brew.json file...");
+   //   });
+   //   
+   //   // Clear the sensor_data file.
+   //   jsonfile.writeFile('./sensor_data.json', empty_array, function (err) {
+   //      isnextbrew = false;
+   //      if (err) console.error(err);
+   //      else console.log("Clearing sensor_data.json file...");
+   //   });
 
 
 }
