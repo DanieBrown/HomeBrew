@@ -296,6 +296,17 @@ function logSensorData() {
    });
 }
 
+function isNextBrew() {
+   jsonfile.readFile('./next_brew.json', function (err, jsonfile) {
+      if (err) isnextbrew = false;
+      else isnextbrew = true;
+
+      if (jsonfile === []) isnextbrew = false;
+      if (jsonfile === undefined) isnextbrew = false;
+      if (jsonfile.length ==== 0) isnextbrew = false;
+   });
+}
+
 // Get JSON object of sensor data
 app.get('/getSensorData', function (req, res) {
    jsonfile.readFile('./sensor_data.json', function (err, jsonfile) {

@@ -254,6 +254,8 @@ function isNextBrew() {
       else isnextbrew = true;
 
       if (jsonfile === []) isnextbrew = false;
+      if (jsonfile === undefined) isnextbrew = false;
+      if (jsonfile.length ==== 0) isnextbrew = false;
    });
 }
 
