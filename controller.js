@@ -7,14 +7,6 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
    var room_readings = [];
    var heating = [];
    var cooling = [];
-   
-   $scope.setSensingInterval = function (interval) {
-      var json_data = [{
-         "Interval": interval
-      }];
-      
-      $http.post('/postNewInterval', json_data);
-   }
 
    // populate graph with currently scheduled brew.
    $http.get('/getCurrentSchedule').success(function (response) {
@@ -32,24 +24,24 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
          var time = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 
          if (response[i].Sensor === 'water') {
+            // populate heating area chart
+            if (response[i].Heating === 1) {
+               heating.push([time, response[i].Temp]);
+            } else {
+               heating.push([time, null]);
+            }
+
+            // populate heating area chart
+            if (response[i].Cooling === 1) {
+               cooling.push([time, response[i].Temp]);
+            } else {
+               cooling.push([time, null]);
+            }
             water_readings.push([time, response[i].Temp]);
          } else if (response[i].Sensor === 'room') {
             room_readings.push([time, response[i].Temp]);
          }
 
-         // populate heating area chart
-         if (response[i].Heating === 1) {
-            heating.push([time, response[i].Temp]);
-         } else {
-            heating.push([time, null]);
-         }
-
-         // populate heating area chart
-         if (response[i].Cooling === 1) {
-            cooling.push([time, response[i].Temp]);
-         } else {
-            cooling.push([time, null]);
-         }
       }
    });
 
@@ -60,23 +52,24 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
                var now = new Date(response[i].Time);
                var time = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
                if (response[i].Sensor === 'water') {
+                  // populate heating area chart
+                  if (response[i].Heating === 1) {
+                     heating.push([time, response[i].Temp]);
+                  } else {
+                     heating.push([time, null]);
+                  }
+
+                  // populate heating area chart
+                  if (response[i].Cooling === 1) {
+                     cooling.push([time, response[i].Temp]);
+                  } else {
+                     cooling.push([time, null]);
+                  }
                   water_readings.push([time, response[i].Temp]);
                } else if (response[i].Sensor === 'room') {
                   room_readings.push([time, response[i].Temp]);
                }
-               // populate heating area chart
-               if (response[i].Heating === 1) {
-                  heating.push([time, response[i].Temp]);
-               } else {
-                  heating.push([time, null]);
-               }
 
-               // populate heating area chart
-               if (response[i].Cooling === 1) {
-                  cooling.push([time, response[i].Temp]);
-               } else {
-                  cooling.push([time, null]);
-               }
             }
          }
       });
@@ -96,6 +89,15 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
             },
             title: {
                text: 'Time & Date'
+            }
+         },
+         yAxis: {
+            title: {
+               enabled: true,
+               text: 'Degrees Fahrenheit',
+               style: {
+                  fontWeight: 'normal'
+               }
             }
          },
          tooltip: {

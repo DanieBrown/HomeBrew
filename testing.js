@@ -206,7 +206,7 @@ var brewer = setInterval(function () {
 //         // After pushing to the sensor_data_array, re-write to the json file.
 //         logSensorData();
 
-         var in_temp = getRandomInt(75, 82);
+         var in_temp = getRandomInt(70, 85);
          var valC = in_temp;
          var valF;
          var out_temp = getRandomInt(75, 82);
@@ -215,13 +215,13 @@ var brewer = setInterval(function () {
          if (tmp_heat_state === 0)
             tmp_cool_state = getRandomInt(0, 2);
          var today = new Date();
-//         sensor_data_array.push({
-//            "Sensor": 'room',
-//            "Time": today,
-//            "Temp": out_temp,
-//            "Heating": tmp_heat_state,
-//            "Cooling": tmp_cool_state
-//         });
+         sensor_data_array.push({
+            "Sensor": 'room',
+            "Time": today,
+            "Temp": out_temp,
+            "Heating": tmp_heat_state,
+            "Cooling": tmp_cool_state
+         });
          sensor_data_array.push({
             "Sensor": 'water',
             "Time": today,
