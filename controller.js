@@ -7,6 +7,14 @@ chart_view.controller('monitor_ctrl', function ($scope, $timeout, $http) {
    var room_readings = [];
    var heating = [];
    var cooling = [];
+   
+   $scope.setSensingInterval = function (interval) {
+      var json_data = [{
+         "Interval": interval
+      }];
+      
+      $http.post('/postNewInterval', json_data);
+   }
 
    // populate graph with currently scheduled brew.
    $http.get('/getCurrentSchedule').success(function (response) {
@@ -148,10 +156,6 @@ newbrew.controller('create_ctrl', function ($scope, $timeout, $http) {
       $http.post('/postNewSchedule', jsonData);
    }
 
-   $scope.setSensingInterval = function (interval) {
-      $http.post('/postNewIntervals', interval);
-   }
-
    $scope.highchartsNG = {
       options: {
          chart: {
@@ -178,7 +182,7 @@ newbrew.controller('create_ctrl', function ($scope, $timeout, $http) {
          data: $scope.chartData
     }],
       title: {
-         text: 'New Brew'
+         text: 'Next Brew'
       },
       loading: false
    }

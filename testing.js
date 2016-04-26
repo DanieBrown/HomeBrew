@@ -171,7 +171,7 @@ jsonfile.writeFile('./sensor_data.json', empty_array, function (err) {
 //b.digitalWrite(blueLed, 0);
 
 var rate = 1.39e-6;
-var interval = 2000;
+var interval = 2;
 
 // ONLY USE TEMP_TARGET FOR TESTING
 //var tempTarget = 75;
@@ -287,7 +287,7 @@ var brewer = setInterval(function () {
 //         b.digitalWrite(blueLed, blueState);
 //      });
 //   });
-}, interval);
+}, interval*1000);
 
 function logSensorData() {
    jsonfile.writeFile('./sensor_data.json', sensor_data_array, function (err) {
@@ -329,9 +329,9 @@ app.post('/postNewSchedule', function (req, res) {
 
 // Set interval
 app.post('/postNewInterval', function (req, res) {
-   console.log("Called setInterval method in server:");
-   console.log(req.body);
-   interval = req.body;
+   console.log("Setting new interval: "+req.body[0].Interval);
+   interval = req.body[0].Interval;
+   console.log("interval: "+ interval);
 });
 
 /* serves main page */
